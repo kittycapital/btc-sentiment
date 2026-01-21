@@ -32,6 +32,124 @@ def fetch_btc_current_price():
         return 95000  # Fallback
 
 
+def calculate_expected_high(upside_data, current_price):
+    """
+    Calculate expected high using marginal probabilities.
+    
+    Polymarket probabilities are cumulative:
+    - P(hits $120k) = 70% means 70% chance BTC reaches $120k or higher
+    - P(hits $130k) = 55% means 55% chance BTC reaches $130k or higher
+    
+    Marginal probability (chance this is the actual peak):
+    - P(peak = $120k) = P(hits $120k) - P(hits $130k) = 70% - 55% = 15%
+    
+    Expected High = Σ (price × marginal_probability)
+    """
+    if not upside_data:
+        return None
+    
+    # Sort by price ascending
+    sorted_data = sorted(upside_data, key=lambda x: x['price'])
+    
+    marginal_probs = []
+    total_marginal = 0
+    
+    for i, item in enumerate(sorted_data):
+        price = item['price']
+        cumulative_prob = item['probability'] / 100  # Convert to decimal
+        
+        # Next higher price's cumulative probability (0 if this is the highest)
+        if i + 1 < len(sorted_data):
+            next_cumulative = sorted_data[i + 1]['probability'] / 100
+        else:
+            next_cumulative = 0
+        
+        # Marginal probability = this cumulative - next cumulative
+        marginal = cumulative_prob - next_cumulative
+        marginal = max(0, marginal)  # Ensure non-negative
+        
+        marginal_probs.append({
+            'price': price,
+            'marginal': marginal
+        })
+        total_marginal += marginal
+    
+    # Also account for probability of NOT hitting the lowest upside target
+    # This means the "peak" is somewhere below the lowest target (i.e., current price area)
+    lowest_target = sorted_data[0]
+    prob_below_lowest = 1 - (lowest_target['probability'] / 100)
+    
+    # Calculate expected value
+    expected_high = 0
+    
+    # Contribution from price staying below lowest target (use current price as proxy)
+    expected_high += current_price * prob_below_lowest
+    
+    # Contribution from each target being the peak
+    for item in marginal_probs:
+        expected_high += item['price'] * item['marginal']
+    
+    return round(expected_high, 0)
+
+
+def calculate_expected_low(downside_data, current_price):
+    """
+    Calculate expected low using marginal probabilities.
+    
+    Polymarket downside probabilities are cumulative:
+    - P(drops to $75k) = 80% means 80% chance BTC drops to $75k or lower
+    - P(drops to $65k) = 60% means 60% chance BTC drops to $65k or lower
+    
+    Marginal probability (chance this is the actual bottom):
+    - P(bottom = $75k) = P(drops to $75k) - P(drops to $65k) = 80% - 60% = 20%
+    
+    Expected Low = Σ (price × marginal_probability)
+    """
+    if not downside_data:
+        return None
+    
+    # Sort by price descending (highest downside target first)
+    sorted_data = sorted(downside_data, key=lambda x: x['price'], reverse=True)
+    
+    marginal_probs = []
+    
+    for i, item in enumerate(sorted_data):
+        price = item['price']
+        cumulative_prob = item['probability'] / 100  # Convert to decimal
+        
+        # Next lower price's cumulative probability (0 if this is the lowest)
+        if i + 1 < len(sorted_data):
+            next_cumulative = sorted_data[i + 1]['probability'] / 100
+        else:
+            next_cumulative = 0
+        
+        # Marginal probability = this cumulative - next cumulative
+        marginal = cumulative_prob - next_cumulative
+        marginal = max(0, marginal)  # Ensure non-negative
+        
+        marginal_probs.append({
+            'price': price,
+            'marginal': marginal
+        })
+    
+    # Probability of NOT dropping to the highest downside target
+    # This means BTC stays above all downside targets
+    highest_target = sorted_data[0]
+    prob_above_highest = 1 - (highest_target['probability'] / 100)
+    
+    # Calculate expected value
+    expected_low = 0
+    
+    # Contribution from price staying above highest downside target (use current price as proxy)
+    expected_low += current_price * prob_above_highest
+    
+    # Contribution from each target being the bottom
+    for item in marginal_probs:
+        expected_low += item['price'] * item['marginal']
+    
+    return round(expected_low, 0)
+
+
 def fetch_polymarket_data():
     """Fetch Bitcoin price predictions from specific Polymarket event"""
     
@@ -126,11 +244,21 @@ def main():
     btc_price = fetch_btc_current_price()
     print(f"\n💰 Current BTC Price: ${btc_price:,.0f}")
     
+    # Calculate expected high and low
+    expected_high = calculate_expected_high(data['upside'], btc_price)
+    expected_low = calculate_expected_low(data['downside'], btc_price)
+    
+    print(f"\n📊 Expected Values (Marginal Probability Method):")
+    print(f"   Expected High: ${expected_high:,.0f}" if expected_high else "   Expected High: N/A")
+    print(f"   Expected Low:  ${expected_low:,.0f}" if expected_low else "   Expected Low: N/A")
+    
     # Save to JSON
     output = {
         'upside': data['upside'],
         'downside': data['downside'],
         'current_price': btc_price,
+        'expected_high': expected_high,
+        'expected_low': expected_low,
         'event_title': data['event_title'],
         'end_date': data['end_date'],
         'last_updated': datetime.utcnow().isoformat() + 'Z'
