@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>비트코인 가격 예측</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,72 +17,129 @@
         }
         
         body {
-            background-color: #0a0a0f;
-            color: #e5e5e5;
-            font-family: 'Noto Sans KR', sans-serif;
-            padding: 24px;
+            background-color: #09090b;
+            color: #fafafa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 32px 24px;
             min-height: 100vh;
         }
         
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
         }
         
         /* Header */
         .header {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
         
         .title {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 4px;
+            color: #fafafa;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
         
         .subtitle {
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             color: #71717a;
+            font-weight: 400;
+        }
+        
+        /* Current Price Card */
+        .price-card {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .price-label {
+            font-size: 0.85rem;
+            color: #a1a1aa;
+            margin-bottom: 4px;
+        }
+        
+        .price-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #22c55e;
+        }
+        
+        .price-badge {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
         
         /* Chart Section */
         .chart-section {
             background: #18181b;
             border: 1px solid #27272a;
-            border-radius: 12px;
-            padding: 24px;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 24px;
         }
         
         .chart-title {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 20px;
+            color: #fafafa;
+            margin-bottom: 6px;
+        }
+        
+        .chart-desc {
+            font-size: 0.8rem;
+            color: #71717a;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.8rem;
+            color: #a1a1aa;
         }
         
-        .chart-title::before {
-            content: '';
-            width: 4px;
-            height: 16px;
-            background: #8b5cf6;
-            border-radius: 2px;
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+        
+        .legend-dot.up {
+            background: linear-gradient(135deg, #22c55e, #10b981);
+        }
+        
+        .legend-dot.down {
+            background: linear-gradient(135deg, #ef4444, #f97316);
         }
         
         .chart-container {
-            height: 350px;
+            height: 400px;
             position: relative;
-        }
-        
-        .chart-note {
-            margin-top: 16px;
-            font-size: 0.75rem;
-            color: #52525b;
-            text-align: center;
         }
         
         /* Footer */
@@ -91,36 +149,41 @@
             align-items: center;
             font-size: 0.75rem;
             color: #52525b;
+            padding-top: 8px;
         }
         
         .data-source {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
         
-        .polymarket-logo {
-            width: 16px;
-            height: 16px;
-            background: #8b5cf6;
+        .polymarket-badge {
+            background: #27272a;
+            color: #a1a1aa;
+            padding: 4px 10px;
             border-radius: 4px;
+            font-weight: 500;
         }
         
         /* Loading */
         .loading {
-            text-align: center;
-            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
             color: #71717a;
         }
         
         .loading-spinner {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border: 3px solid #27272a;
-            border-top-color: #8b5cf6;
+            border-top-color: #22c55e;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
+            margin-bottom: 16px;
         }
         
         @keyframes spin {
@@ -132,9 +195,6 @@
             text-align: center;
             padding: 60px 20px;
             color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
         }
     </style>
 </head>
@@ -143,22 +203,49 @@
         <!-- Header -->
         <div class="header">
             <h1 class="title">비트코인 가격 예측</h1>
-            <p class="subtitle">Bitcoin Price Predictions from Polymarket</p>
+            <p class="subtitle">Bitcoin Price Predictions before 2027 · Polymarket</p>
         </div>
         
-        <!-- Content -->
-        <div id="content">
-            <div class="loading">
-                <div class="loading-spinner"></div>
-                <p>데이터 로딩 중...</p>
+        <!-- Current Price Card -->
+        <div class="price-card" id="priceCard" style="display: none;">
+            <div>
+                <div class="price-label">현재 비트코인 가격</div>
+                <div class="price-value" id="currentPrice">--</div>
+            </div>
+            <div class="price-badge">LIVE</div>
+        </div>
+        
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <div>
+                    <h2 class="chart-title">가격 목표별 도달 확률</h2>
+                    <p class="chart-desc">2027년 1월 1일까지 해당 가격 도달 확률</p>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-dot up"></div>
+                        <span>상승 목표</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot down"></div>
+                        <span>하락 목표</span>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container" id="chartContainer">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>데이터 로딩 중...</p>
+                </div>
             </div>
         </div>
         
         <!-- Footer -->
         <div class="footer">
             <div class="data-source">
-                <div class="polymarket-logo"></div>
-                <span>Data: Polymarket</span>
+                <span class="polymarket-badge">Polymarket</span>
+                <span>예측 시장 데이터 기반</span>
             </div>
             <span id="lastUpdated">--</span>
         </div>
@@ -168,34 +255,32 @@
         // Chart.js defaults
         Chart.defaults.color = '#71717a';
         Chart.defaults.borderColor = '#27272a';
-        Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+        Chart.defaults.font.family = "'Inter', sans-serif";
         
         let chart = null;
         
         async function loadData() {
-            const contentEl = document.getElementById('content');
-            
             try {
                 const response = await fetch('data.json');
-                
-                if (!response.ok) {
-                    throw new Error('Data file not found');
-                }
+                if (!response.ok) throw new Error('Data not found');
                 
                 const data = await response.json();
                 
-                if (!data.markets || data.markets.length === 0) {
-                    throw new Error('No market data');
+                // Show current price
+                if (data.current_price) {
+                    document.getElementById('priceCard').style.display = 'flex';
+                    document.getElementById('currentPrice').textContent = 
+                        '$' + data.current_price.toLocaleString();
                 }
                 
-                renderChart(data.markets);
+                // Render chart
+                renderChart(data);
                 
                 // Update timestamp
                 if (data.last_updated) {
                     const date = new Date(data.last_updated);
                     document.getElementById('lastUpdated').textContent = 
                         'Updated: ' + date.toLocaleDateString('en-US', {
-                            year: 'numeric',
                             month: 'short',
                             day: 'numeric',
                             hour: '2-digit',
@@ -205,54 +290,53 @@
                 
             } catch (error) {
                 console.error('Error:', error);
-                contentEl.innerHTML = `
+                document.getElementById('chartContainer').innerHTML = `
                     <div class="error">
                         <p>데이터를 불러올 수 없습니다.</p>
-                        <p style="font-size: 0.8rem; margin-top: 8px;">${error.message}</p>
                     </div>
                 `;
             }
         }
         
-        function renderChart(markets) {
-            const contentEl = document.getElementById('content');
+        function renderChart(data) {
+            const container = document.getElementById('chartContainer');
+            container.innerHTML = '<canvas id="priceChart"></canvas>';
             
-            // Prepare data
-            const labels = markets.map(m => '$' + (m.price_target / 1000) + 'K');
-            const probabilities = markets.map(m => m.probability);
+            // Combine and sort all data by price
+            const allData = [
+                ...data.downside.map(d => ({ ...d, type: 'down' })),
+                ...data.upside.map(d => ({ ...d, type: 'up' }))
+            ].sort((a, b) => a.price - b.price);
             
-            // Create gradient colors based on probability
-            const colors = probabilities.map(prob => {
-                if (prob >= 60) return '#22c55e';  // Green - high
-                if (prob >= 30) return '#eab308';  // Yellow - medium
-                return '#ef4444';  // Red - low
+            const labels = allData.map(d => '$' + (d.price / 1000) + 'K');
+            const probabilities = allData.map(d => d.probability);
+            
+            // Create gradient colors
+            const colors = allData.map(d => {
+                if (d.type === 'up') {
+                    return '#10b981';  // Green for upside
+                } else {
+                    return '#f97316';  // Orange for downside
+                }
             });
             
-            contentEl.innerHTML = `
-                <div class="chart-section">
-                    <h2 class="chart-title">가격 목표별 도달 확률</h2>
-                    <div class="chart-container">
-                        <canvas id="priceChart"></canvas>
-                    </div>
-                    <p class="chart-note">X축: 비트코인 가격 목표 | Y축: 도달 확률 (%)</p>
-                </div>
-            `;
-            
             const ctx = document.getElementById('priceChart').getContext('2d');
+            
+            // Current price for annotation
+            const currentPrice = data.current_price || 95000;
+            const currentPriceLabel = '$' + (currentPrice / 1000).toFixed(0) + 'K';
             
             chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: '도달 확률',
                         data: probabilities,
                         backgroundColor: colors,
                         borderColor: colors,
                         borderWidth: 0,
-                        borderRadius: 6,
-                        barThickness: 50,
-                        maxBarThickness: 60
+                        borderRadius: 4,
+                        borderSkipped: false
                     }]
                 },
                 options: {
@@ -263,16 +347,55 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: '#27272a',
-                            titleColor: '#e5e5e5',
-                            bodyColor: '#e5e5e5',
-                            borderColor: '#3f3f46',
+                            backgroundColor: '#18181b',
+                            titleColor: '#fafafa',
+                            bodyColor: '#fafafa',
+                            borderColor: '#27272a',
                             borderWidth: 1,
-                            padding: 12,
+                            padding: 14,
+                            cornerRadius: 8,
                             displayColors: false,
+                            titleFont: {
+                                family: "'JetBrains Mono', monospace",
+                                size: 13,
+                                weight: 600
+                            },
+                            bodyFont: {
+                                family: "'Inter', sans-serif",
+                                size: 12
+                            },
                             callbacks: {
-                                title: (items) => 'Bitcoin ' + items[0].label,
+                                title: (items) => {
+                                    const item = allData[items[0].dataIndex];
+                                    const direction = item.type === 'up' ? '↑ 상승' : '↓ 하락';
+                                    return 'Bitcoin ' + items[0].label + ' ' + direction;
+                                },
                                 label: (item) => '도달 확률: ' + item.raw.toFixed(1) + '%'
+                            }
+                        },
+                        annotation: {
+                            annotations: {
+                                currentPriceLine: {
+                                    type: 'line',
+                                    xMin: currentPriceLabel,
+                                    xMax: currentPriceLabel,
+                                    borderColor: 'rgba(250, 250, 250, 0.5)',
+                                    borderWidth: 2,
+                                    borderDash: [6, 4],
+                                    label: {
+                                        display: true,
+                                        content: '현재가',
+                                        position: 'start',
+                                        backgroundColor: 'rgba(250, 250, 250, 0.9)',
+                                        color: '#09090b',
+                                        font: {
+                                            size: 11,
+                                            weight: 500
+                                        },
+                                        padding: 4,
+                                        borderRadius: 4
+                                    }
+                                }
                             }
                         }
                     },
@@ -284,17 +407,18 @@
                             ticks: {
                                 font: {
                                     family: "'JetBrains Mono', monospace",
-                                    size: 12,
-                                    weight: 500
+                                    size: 11
                                 },
-                                color: '#a1a1aa'
+                                color: '#a1a1aa',
+                                maxRotation: 45,
+                                minRotation: 45
                             }
                         },
                         y: {
                             min: 0,
                             max: 100,
                             grid: {
-                                color: '#27272a',
+                                color: 'rgba(39, 39, 42, 0.5)',
                                 drawBorder: false
                             },
                             ticks: {
@@ -302,8 +426,9 @@
                                     family: "'JetBrains Mono', monospace",
                                     size: 11
                                 },
+                                color: '#71717a',
                                 callback: (value) => value + '%',
-                                stepSize: 20
+                                stepSize: 25
                             }
                         }
                     }
