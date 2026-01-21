@@ -88,8 +88,10 @@
       "type": "down"
     }
   ],
-  "current_price": 89175,
+  "current_price": 89130,
+  "expected_high": 123689.0,
+  "expected_low": 66392.0,
   "event_title": "What price will Bitcoin hit in 2026?",
   "end_date": "2027-01-01T05:00:00Z",
-  "last_updated": "2026-01-21T08:30:45.251005Z"
+  "last_updated": "2026-01-21T09:05:32.508338Z"
 }
