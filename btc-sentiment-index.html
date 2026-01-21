@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비트코인 시장 센티먼트</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0f;
+            color: #e5e5e5;
+            font-family: 'Noto Sans KR', sans-serif;
+            padding: 24px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            margin-bottom: 24px;
+        }
+        
+        .title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        
+        .subtitle {
+            font-size: 0.875rem;
+            color: #71717a;
+        }
+        
+        /* Markets Section */
+        .markets-section {
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: #8b5cf6;
+            border-radius: 2px;
+        }
+        
+        /* Market Item */
+        .market-item {
+            background: #0a0a0f;
+            border: 1px solid #27272a;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+        
+        .market-item:hover {
+            border-color: #3f3f46;
+        }
+        
+        .market-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .market-question {
+            font-size: 0.9rem;
+            color: #e5e5e5;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .market-data {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .probability {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            min-width: 70px;
+        }
+        
+        .probability.high {
+            color: #22c55e;
+        }
+        
+        .probability.medium {
+            color: #eab308;
+        }
+        
+        .probability.low {
+            color: #ef4444;
+        }
+        
+        .prob-bar-container {
+            flex: 1;
+            height: 8px;
+            background: #27272a;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .prob-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .prob-bar.high {
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+        }
+        
+        .prob-bar.medium {
+            background: linear-gradient(90deg, #eab308, #facc15);
+        }
+        
+        .prob-bar.low {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+        
+        .market-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 0.75rem;
+            color: #52525b;
+        }
+        
+        .volume {
+            color: #71717a;
+        }
+        
+        .end-date {
+            color: #71717a;
+        }
+        
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #52525b;
+        }
+        
+        .data-source {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .polymarket-logo {
+            width: 16px;
+            height: 16px;
+            background: #8b5cf6;
+            border-radius: 4px;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #71717a;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #27272a;
+            border-top-color: #8b5cf6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Error */
+        .error {
+            text-align: center;
+            padding: 40px 20px;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+        }
+        
+        /* No data */
+        .no-data {
+            text-align: center;
+            padding: 40px 20px;
+            color: #71717a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">비트코인 시장 센티먼트</h1>
+            <p class="subtitle">Bitcoin Market Sentiment from Polymarket</p>
+        </div>
+        
+        <!-- Content will be loaded here -->
+        <div id="content">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>데이터 로딩 중...</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="data-source">
+                <div class="polymarket-logo"></div>
+                <span>Data: Polymarket</span>
+            </div>
+            <span id="lastUpdated">--</span>
+        </div>
+    </div>
+
+    <script>
+        async function loadData() {
+            const contentEl = document.getElementById('content');
+            
+            try {
+                const response = await fetch('data.json');
+                
+                if (!response.ok) {
+                    throw new Error('Data file not found');
+                }
+                
+                const data = await response.json();
+                
+                renderContent(data.markets);
+                
+                // Update timestamp
+                if (data.last_updated) {
+                    const date = new Date(data.last_updated);
+                    document.getElementById('lastUpdated').textContent = 
+                        'Updated: ' + date.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                contentEl.innerHTML = `
+                    <div class="error">
+                        <p>데이터를 불러올 수 없습니다.</p>
+                        <p style="font-size: 0.8rem; margin-top: 8px;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderContent(markets) {
+            const contentEl = document.getElementById('content');
+            
+            if (!markets || markets.length === 0) {
+                contentEl.innerHTML = `
+                    <div class="no-data">
+                        <p>현재 활성화된 비트코인 예측 시장이 없습니다.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Build markets HTML
+            let marketsHTML = '';
+            
+            markets.forEach(market => {
+                const prob = market.probability;
+                const probClass = prob >= 60 ? 'high' : prob >= 30 ? 'medium' : 'low';
+                
+                const endDateStr = market.end_date ? 
+                    new Date(market.end_date).toLocaleDateString('ko-KR', { 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    }) : '';
+                
+                marketsHTML += `
+                    <div class="market-item">
+                        <div class="market-question">${market.question}</div>
+                        <div class="market-data">
+                            <span class="probability ${probClass}">${prob.toFixed(0)}%</span>
+                            <div class="prob-bar-container">
+                                <div class="prob-bar ${probClass}" style="width: ${prob}%"></div>
+                            </div>
+                        </div>
+                        <div class="market-meta">
+                            <span class="volume">Volume: $${formatVolume(market.volume)}</span>
+                            ${endDateStr ? `<span class="end-date">만료: ${endDateStr}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            contentEl.innerHTML = `
+                <div class="markets-section">
+                    <h2 class="section-title">비트코인 예측 시장</h2>
+                    ${marketsHTML}
+                </div>
+            `;
+        }
+        
+        function formatVolume(volume) {
+            if (!volume) return '0';
+            if (volume >= 1000000) {
+                return (volume / 1000000).toFixed(1) + 'M';
+            } else if (volume >= 1000) {
+                return (volume / 1000).toFixed(0) + 'K';
+            }
+            return volume.toFixed(0);
+        }
+        
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>
