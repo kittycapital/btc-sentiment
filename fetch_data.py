@@ -7,11 +7,16 @@ Fetches data from specific Polymarket event:
 import json
 import requests
 from datetime import datetime
+import re
 
 # Configuration
 DATA_FILE = 'data.json'
 EVENT_SLUG = 'what-price-will-bitcoin-hit-before-2027'
 POLYMARKET_API = f'https://gamma-api.polymarket.com/events?slug={EVENT_SLUG}'
+
+# Expected price targets from Polymarket
+VALID_UPSIDE = [100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000, 200000]
+VALID_DOWNSIDE = [25000, 35000, 45000, 55000, 65000, 75000]
 
 
 def fetch_btc_current_price():
@@ -45,8 +50,8 @@ def fetch_polymarket_data():
         event = events[0]
         print(f"   ✅ Found: {event.get('title')}")
         
-        upside = []  # ↑ targets (price going UP to this level)
-        downside = []  # ↓ targets (price going DOWN to this level)
+        upside = []
+        downside = []
         
         for market in event.get('markets', []):
             try:
@@ -58,38 +63,37 @@ def fetch_polymarket_data():
                 yes_idx = next((i for i, o in enumerate(outcomes) if 'yes' in o.lower()), 0)
                 probability = float(prices[yes_idx]) * 100 if yes_idx < len(prices) else 0
                 
-                # Extract price target
-                import re
-                match = re.search(r'(\d{2,3}),?(\d{3})', question)
-                if match:
-                    price = int(match.group(1) + match.group(2))
-                else:
-                    match = re.search(r'(\d+)', question)
-                    if match:
-                        price = int(match.group(1))
-                        if price < 1000:
-                            price *= 1000
-                    else:
-                        continue
-                
-                # Determine if upside or downside based on arrow in question
+                # Check for upside targets (↑)
                 if '↑' in question:
-                    upside.append({
-                        'price': price,
-                        'probability': round(probability, 1),
-                        'type': 'up'
-                    })
+                    for valid_price in VALID_UPSIDE:
+                        price_str = f"{valid_price:,}"
+                        if price_str in question or str(valid_price) in question:
+                            upside.append({
+                                'price': valid_price,
+                                'probability': round(probability, 1),
+                                'type': 'up'
+                            })
+                            break
+                
+                # Check for downside targets (↓)
                 elif '↓' in question:
-                    downside.append({
-                        'price': price,
-                        'probability': round(probability, 1),
-                        'type': 'down'
-                    })
+                    for valid_price in VALID_DOWNSIDE:
+                        price_str = f"{valid_price:,}"
+                        if price_str in question or str(valid_price) in question:
+                            downside.append({
+                                'price': valid_price,
+                                'probability': round(probability, 1),
+                                'type': 'down'
+                            })
+                            break
                     
             except Exception as e:
                 continue
         
-        # Sort by price
+        # Remove duplicates and sort
+        upside = list({m['price']: m for m in upside}.values())
+        downside = list({m['price']: m for m in downside}.values())
+        
         upside.sort(key=lambda x: x['price'])
         downside.sort(key=lambda x: x['price'])
         
