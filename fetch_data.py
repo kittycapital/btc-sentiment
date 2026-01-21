@@ -1,191 +1,150 @@
 """
-Bitcoin Market Sentiment - Data Fetcher
-Fetches Bitcoin price prediction markets from Polymarket API
-Only shows price target predictions (e.g. Bitcoin $100K, $150K)
+Bitcoin Price Prediction - Data Fetcher
+Fetches data from specific Polymarket event:
+"What price will Bitcoin hit before 2027?"
 """
 
 import json
 import requests
 from datetime import datetime
-import re
 
 # Configuration
 DATA_FILE = 'data.json'
-POLYMARKET_API = 'https://gamma-api.polymarket.com/events'
+EVENT_SLUG = 'what-price-will-bitcoin-hit-before-2027'
+POLYMARKET_API = f'https://gamma-api.polymarket.com/events?slug={EVENT_SLUG}'
 
 
-def extract_price_target(text):
-    """Extract price target from text like '$100K', '$150,000', '100000' etc."""
-    
-    # Pattern for $100K, $150k format
-    match = re.search(r'\$?(\d+)[kK]', text)
-    if match:
-        return int(match.group(1)) * 1000
-    
-    # Pattern for $100,000 or $100000 format
-    match = re.search(r'\$?([\d,]+)', text)
-    if match:
-        num_str = match.group(1).replace(',', '')
-        if len(num_str) >= 5:  # At least 10000
-            return int(num_str)
-    
-    return None
-
-
-def is_expired(end_date_str):
-    """Check if the market has expired"""
-    if not end_date_str:
-        return False
-    
+def fetch_btc_current_price():
+    """Fetch current BTC price from CoinGecko"""
     try:
-        end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00'))
-        now = datetime.now(end_date.tzinfo)
-        return end_date < now
+        url = "https://api.coingecko.com/api/v3/simple/price"
+        params = {'ids': 'bitcoin', 'vs_currencies': 'usd'}
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        return data['bitcoin']['usd']
     except:
-        return False
+        return 95000  # Fallback
 
 
-def fetch_polymarket_btc_markets():
-    """Fetch Bitcoin price prediction markets from Polymarket"""
+def fetch_polymarket_data():
+    """Fetch Bitcoin price predictions from specific Polymarket event"""
     
-    print("📡 Fetching Polymarket Bitcoin markets...")
-    
-    params = {
-        'tag_id': 21,  # Crypto tag
-        'active': 'true',
-        'closed': 'false',
-        'limit': 100
-    }
+    print("📡 Fetching Polymarket Bitcoin predictions...")
+    print(f"   Event: {EVENT_SLUG}")
     
     try:
-        response = requests.get(POLYMARKET_API, params=params)
+        response = requests.get(POLYMARKET_API)
         response.raise_for_status()
         events = response.json()
         
-        print(f"   ✅ Got {len(events)} crypto events")
+        if not events:
+            print("   ❌ Event not found")
+            return None
         
-        # Filter for Bitcoin price markets
-        btc_markets = []
+        event = events[0]
+        print(f"   ✅ Found: {event.get('title')}")
         
-        for event in events:
-            title = (event.get('title') or '').lower()
-            
-            # Only Bitcoin-related
-            if 'bitcoin' not in title and 'btc' not in title:
-                continue
-            
-            # Only price prediction markets
-            if 'price' not in title and 'hit' not in title:
-                continue
-            
-            # Skip daily/hourly/short-term markets
-            skip_keywords = ['today', 'hour', 'up or down', 'tomorrow', 
-                           'january 2', 'january 3', 'january 4', 'january 5',
-                           'january 6', 'january 7', 'january 8', 'january 9',
-                           'december', 'weekly', 'daily', 'this week']
-            if any(skip in title for skip in skip_keywords):
-                continue
-            
-            # Skip expired markets
-            end_date = event.get('endDate', '')
-            if is_expired(end_date):
-                continue
-            
-            # Extract market data
-            if event.get('markets'):
-                for market in event['markets']:
-                    try:
-                        outcomes = json.loads(market.get('outcomes', '[]'))
-                        prices = json.loads(market.get('outcomePrices', '[]'))
-                        
-                        # Get market question (contains specific price target)
-                        market_question = market.get('question', '') or market.get('groupItemTitle', '')
-                        
-                        # Try to extract price target
-                        price_target = extract_price_target(market_question)
-                        
-                        # If no price in market question, try outcomes
-                        if not price_target:
-                            for outcome in outcomes:
-                                price_target = extract_price_target(outcome)
-                                if price_target:
-                                    break
-                        
-                        # Skip if no price target found
-                        if not price_target:
-                            continue
-                        
-                        # Skip unrealistic targets (below 50K or above 500K)
-                        if price_target < 50000 or price_target > 500000:
-                            continue
-                        
-                        # Find "Yes" probability
-                        yes_index = None
-                        for i, outcome in enumerate(outcomes):
-                            if outcome.lower() == 'yes' or 'yes' in outcome.lower():
-                                yes_index = i
-                                break
-                        
-                        if yes_index is not None and yes_index < len(prices):
-                            prob = float(prices[yes_index]) * 100
-                            volume = float(market.get('volume') or 0)
-                            
-                            btc_markets.append({
-                                'price_target': price_target,
-                                'probability': round(prob, 1),
-                                'volume': volume,
-                                'end_date': end_date
-                            })
-                    except Exception as e:
+        upside = []  # ↑ targets (price going UP to this level)
+        downside = []  # ↓ targets (price going DOWN to this level)
+        
+        for market in event.get('markets', []):
+            try:
+                question = market.get('groupItemTitle', '') or market.get('question', '')
+                outcomes = json.loads(market.get('outcomes', '[]'))
+                prices = json.loads(market.get('outcomePrices', '[]'))
+                
+                # Find Yes probability
+                yes_idx = next((i for i, o in enumerate(outcomes) if 'yes' in o.lower()), 0)
+                probability = float(prices[yes_idx]) * 100 if yes_idx < len(prices) else 0
+                
+                # Extract price target
+                import re
+                match = re.search(r'(\d{2,3}),?(\d{3})', question)
+                if match:
+                    price = int(match.group(1) + match.group(2))
+                else:
+                    match = re.search(r'(\d+)', question)
+                    if match:
+                        price = int(match.group(1))
+                        if price < 1000:
+                            price *= 1000
+                    else:
                         continue
+                
+                # Determine if upside or downside based on arrow in question
+                if '↑' in question:
+                    upside.append({
+                        'price': price,
+                        'probability': round(probability, 1),
+                        'type': 'up'
+                    })
+                elif '↓' in question:
+                    downside.append({
+                        'price': price,
+                        'probability': round(probability, 1),
+                        'type': 'down'
+                    })
+                    
+            except Exception as e:
+                continue
         
-        # Remove duplicates (same price target, keep highest volume)
-        unique_markets = {}
-        for m in btc_markets:
-            key = m['price_target']
-            if key not in unique_markets or m['volume'] > unique_markets[key]['volume']:
-                unique_markets[key] = m
+        # Sort by price
+        upside.sort(key=lambda x: x['price'])
+        downside.sort(key=lambda x: x['price'])
         
-        btc_markets = list(unique_markets.values())
+        print(f"   ✅ Upside targets: {len(upside)}")
+        print(f"   ✅ Downside targets: {len(downside)}")
         
-        # Sort by price target (low to high)
-        btc_markets.sort(key=lambda x: x['price_target'])
-        
-        print(f"   ✅ Found {len(btc_markets)} Bitcoin price markets")
-        
-        return btc_markets
+        return {
+            'upside': upside,
+            'downside': downside,
+            'event_title': event.get('title'),
+            'end_date': event.get('endDate')
+        }
         
     except Exception as e:
         print(f"   ❌ Error: {e}")
-        return []
+        return None
 
 
 def main():
-    print("🚀 Starting Bitcoin Sentiment data fetch...\n")
+    print("🚀 Starting Bitcoin Price Prediction fetch...\n")
     
-    # Fetch markets
-    markets = fetch_polymarket_btc_markets()
+    # Fetch predictions
+    data = fetch_polymarket_data()
     
-    if not markets:
-        print("❌ No markets found")
+    if not data:
+        print("❌ Failed to fetch data")
         return
+    
+    # Fetch current BTC price
+    btc_price = fetch_btc_current_price()
+    print(f"\n💰 Current BTC Price: ${btc_price:,.0f}")
     
     # Save to JSON
     output = {
-        'markets': markets,
+        'upside': data['upside'],
+        'downside': data['downside'],
+        'current_price': btc_price,
+        'event_title': data['event_title'],
+        'end_date': data['end_date'],
         'last_updated': datetime.utcnow().isoformat() + 'Z'
     }
     
     with open(DATA_FILE, 'w') as f:
         json.dump(output, f, indent=2)
     
-    print(f"\n💾 Saved {len(markets)} markets to {DATA_FILE}")
+    print(f"\n💾 Saved to {DATA_FILE}")
     
     # Print summary
-    print("\n📊 Price Targets:")
-    for m in markets:
-        price_label = f"${m['price_target']:,}"
-        print(f"   • {price_label} → {m['probability']}%")
+    print("\n📈 Upside Predictions:")
+    for m in data['upside']:
+        print(f"   ${m['price']:,} → {m['probability']}%")
+    
+    print("\n📉 Downside Predictions:")
+    for m in data['downside']:
+        print(f"   ${m['price']:,} → {m['probability']}%")
 
 
 if __name__ == '__main__':
