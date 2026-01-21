@@ -1,275 +1,222 @@
 {
   "markets": [
     {
-      "question": "MicroStrategy sells any Bitcoin by ___ ?",
-      "probability": 0.0,
-      "volume": 17976157.529867,
-      "end_date": "2025-12-31T12:00:00Z"
-    },
-    {
-      "question": "When will Bitcoin hit $150k?",
-      "probability": 0.0,
-      "volume": 1555669.585882,
-      "end_date": ""
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 4.9,
-      "volume": 1423754.141708,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "MicroStrategy sells any Bitcoin by ___ ?",
-      "probability": 4.7,
-      "volume": 978991.759175,
-      "end_date": "2025-12-31T12:00:00Z"
-    },
-    {
-      "question": "When will Bitcoin hit $150k?",
-      "probability": 0.0,
-      "volume": 778900.335643,
-      "end_date": ""
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 50.5,
-      "volume": 769655.08409,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 24.5,
-      "volume": 694136.864086,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 13.5,
-      "volume": 673843.877591,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 67.5,
-      "volume": 673114.244328,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 36.5,
-      "volume": 511742.997836,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 9.5,
-      "volume": 381981.464226,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "MicroStrategy sells any Bitcoin by ___ ?",
-      "probability": 10.0,
-      "volume": 346266.120602,
-      "end_date": "2025-12-31T12:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 29.0,
-      "volume": 314870.794073,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 36.5,
-      "volume": 300164.547096,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 80.0,
-      "volume": 283276.38054,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 21.5,
-      "volume": 279559.494963,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 6.5,
-      "volume": 259144.243858,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "When will Bitcoin hit $150k?",
-      "probability": 12.5,
-      "volume": 253592.159108,
-      "end_date": ""
-    },
-    {
       "question": "Will China unban Bitcoin by 2027?",
+      "price_target": null,
       "probability": 3.9,
-      "volume": 252227.218811,
+      "volume": 252228.258311,
       "end_date": "2026-12-31T00:00:00Z"
     },
     {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 13.0,
-      "volume": 227756.909061,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 11.5,
-      "volume": 214178.208513,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 44.5,
-      "volume": 190712.263888,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "When will Bitcoin hit $150k?",
-      "probability": 2.2,
-      "volume": 185310.998155,
-      "end_date": ""
-    },
-    {
-      "question": "When will Bitcoin hit $150k?",
-      "probability": 25.5,
-      "volume": 166359.251064,
-      "end_date": ""
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 9.0,
-      "volume": 162144.31588,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 59.5,
-      "volume": 160641.129774,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 17.5,
-      "volume": 151814.706603,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "MicroStrategy sells any Bitcoin by ___ ?",
-      "probability": 24.0,
-      "volume": 116989.444326,
-      "end_date": "2025-12-31T12:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 14.0,
-      "volume": 113272.790504,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
       "question": "Will Bitcoin replace SHA-256 before 2027?",
+      "price_target": null,
       "probability": 5.3,
       "volume": 112565.518082,
       "end_date": "2026-12-31T00:00:00Z"
     },
     {
-      "question": "Will El Salvador hold $1b+ of BTC by...? ",
+      "question": "Will El Salvador hold $1b+ of BTC by December 31? ",
+      "price_target": null,
       "probability": 0.0,
       "volume": 60041.069024,
       "end_date": "2027-01-01T05:00:00Z"
     },
     {
-      "question": "Will knots flip bitcoin core by ___?",
-      "probability": 0.0,
-      "volume": 37739.468097,
-      "end_date": "2026-01-01T05:00:00Z"
-    },
-    {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 100.0,
-      "volume": 23188.851454,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "question": "Will El Salvador hold $1b+ of BTC by...? ",
+      "question": "Will El Salvador hold $1b+ of BTC by September 30? ",
+      "price_target": null,
       "probability": 0.0,
       "volume": 14323.659323,
       "end_date": "2027-01-01T05:00:00Z"
     },
     {
-      "question": "What price will Bitcoin hit in 2026?",
-      "probability": 100.0,
-      "volume": 12392.22213,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
       "question": "US national Bitcoin reserve before 2027?",
+      "price_target": null,
       "probability": 35.0,
       "volume": 10949.070801,
       "end_date": "2026-12-31T00:00:00Z"
     },
     {
-      "question": "Another S&P 500 Company buys Bitcoin by ___?",
-      "probability": 0.0,
-      "volume": 10435.741292,
-      "end_date": "2025-11-30T00:00:00Z"
-    },
-    {
-      "question": "Will a new country buy Bitcoin by...?",
+      "question": "Will a new country buy Bitcoin by December 31, 2025?",
+      "price_target": null,
       "probability": 0.0,
       "volume": 6873.222933,
       "end_date": "2026-12-31T00:00:00Z"
     },
     {
-      "question": "Another S&P 500 Company buys Bitcoin by ___?",
-      "probability": 0.0,
-      "volume": 2886.12802,
-      "end_date": "2025-11-30T00:00:00Z"
-    },
-    {
       "question": "Bitcoin more valuable than any company before 2027?",
+      "price_target": null,
       "probability": 10.0,
       "volume": 866.632428,
       "end_date": "2026-12-31T00:00:00Z"
     },
     {
-      "question": "Another S&P 500 Company buys Bitcoin by ___?",
-      "probability": 53.8,
-      "volume": 865.175768,
-      "end_date": "2025-11-30T00:00:00Z"
-    },
-    {
-      "question": "Will a new country buy Bitcoin by...?",
+      "question": "Will a new country buy Bitcoin by December 31, 2026?",
+      "price_target": null,
       "probability": 77.0,
       "volume": 209.022515,
       "end_date": "2026-12-31T00:00:00Z"
     },
     {
-      "question": "Will a new country buy Bitcoin by...?",
+      "question": "Will a new country buy Bitcoin by June 30, 2026?",
+      "price_target": null,
       "probability": 53.0,
       "volume": 111.287022,
       "end_date": "2026-12-31T00:00:00Z"
     },
     {
-      "question": "Will knots flip bitcoin core by ___?",
-      "probability": 24.5,
-      "volume": 92.061833,
-      "end_date": "2026-01-01T05:00:00Z"
-    },
-    {
-      "question": "Will El Salvador hold $1b+ of BTC by...? ",
+      "question": "Will El Salvador hold $1b+ of BTC by December 31, 2026?",
+      "price_target": null,
       "probability": 58.0,
       "volume": 53.824409,
       "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $15,000 \ub3c4\ub2ec",
+      "price_target": 15000,
+      "probability": 4.9,
+      "volume": 1423754.141708,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $25,000 \ub3c4\ub2ec",
+      "price_target": 25000,
+      "probability": 9.0,
+      "volume": 162144.31588,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $35,000 \ub3c4\ub2ec",
+      "price_target": 35000,
+      "probability": 13.5,
+      "volume": 673843.877591,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $45,000 \ub3c4\ub2ec",
+      "price_target": 45000,
+      "probability": 24.5,
+      "volume": 694176.864086,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $55,000 \ub3c4\ub2ec",
+      "price_target": 55000,
+      "probability": 36.5,
+      "volume": 511832.997836,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $65,000 \ub3c4\ub2ec",
+      "price_target": 65000,
+      "probability": 50.5,
+      "volume": 769725.08409,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $75,000 \ub3c4\ub2ec",
+      "price_target": 75000,
+      "probability": 67.5,
+      "volume": 673114.244328,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $85,000 \ub3c4\ub2ec",
+      "price_target": 85000,
+      "probability": 100.0,
+      "volume": 12392.22213,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $90,000 \ub3c4\ub2ec",
+      "price_target": 90000,
+      "probability": 100.0,
+      "volume": 23188.851454,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $100,000 \ub3c4\ub2ec",
+      "price_target": 100000,
+      "probability": 80.0,
+      "volume": 283276.38054,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $110,000 \ub3c4\ub2ec",
+      "price_target": 110000,
+      "probability": 59.5,
+      "volume": 160671.129774,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $120,000 \ub3c4\ub2ec",
+      "price_target": 120000,
+      "probability": 44.5,
+      "volume": 190712.263888,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $130,000 \ub3c4\ub2ec",
+      "price_target": 130000,
+      "probability": 36.5,
+      "volume": 300164.547096,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $140,000 \ub3c4\ub2ec",
+      "price_target": 140000,
+      "probability": 29.0,
+      "volume": 314870.794073,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $150,000 \ub3c4\ub2ec",
+      "price_target": 150000,
+      "probability": 0.0,
+      "volume": 1555669.585882,
+      "end_date": ""
+    },
+    {
+      "question": "Bitcoin $160,000 \ub3c4\ub2ec",
+      "price_target": 160000,
+      "probability": 17.5,
+      "volume": 151814.706603,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $170,000 \ub3c4\ub2ec",
+      "price_target": 170000,
+      "probability": 14.0,
+      "volume": 113272.790504,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $180,000 \ub3c4\ub2ec",
+      "price_target": 180000,
+      "probability": 13.0,
+      "volume": 227756.909061,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $190,000 \ub3c4\ub2ec",
+      "price_target": 190000,
+      "probability": 11.5,
+      "volume": 214178.208513,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $200,000 \ub3c4\ub2ec",
+      "price_target": 200000,
+      "probability": 9.5,
+      "volume": 381981.464226,
+      "end_date": "2027-01-01T05:00:00Z"
+    },
+    {
+      "question": "Bitcoin $250,000 \ub3c4\ub2ec",
+      "price_target": 250000,
+      "probability": 6.5,
+      "volume": 259144.243858,
+      "end_date": "2027-01-01T05:00:00Z"
     }
   ],
-  "last_updated": "2026-01-21T02:05:26.462563Z"
+  "last_updated": "2026-01-21T02:11:55.429266Z"
 }
