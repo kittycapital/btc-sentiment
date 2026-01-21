@@ -322,9 +322,13 @@
             
             const ctx = document.getElementById('priceChart').getContext('2d');
             
-            // Current price for annotation
+            // Current price for annotation - find position between downside and upside
             const currentPrice = data.current_price || 95000;
-            const currentPriceLabel = '$' + (currentPrice / 1000).toFixed(0) + 'K';
+            const currentPriceFormatted = '$' + currentPrice.toLocaleString();
+            
+            // Find the index where current price should be (between last downside and first upside)
+            const lastDownsideIndex = data.downside.length - 1;
+            const linePosition = lastDownsideIndex + 0.5;  // Position between bars
             
             chart = new Chart(ctx, {
                 type: 'bar',
@@ -377,22 +381,22 @@
                             annotations: {
                                 currentPriceLine: {
                                     type: 'line',
-                                    xMin: currentPriceLabel,
-                                    xMax: currentPriceLabel,
-                                    borderColor: 'rgba(250, 250, 250, 0.5)',
+                                    xMin: linePosition,
+                                    xMax: linePosition,
+                                    borderColor: 'rgba(250, 250, 250, 0.7)',
                                     borderWidth: 2,
                                     borderDash: [6, 4],
                                     label: {
                                         display: true,
-                                        content: '현재가',
+                                        content: '현재가 ' + currentPriceFormatted,
                                         position: 'start',
-                                        backgroundColor: 'rgba(250, 250, 250, 0.9)',
+                                        backgroundColor: 'rgba(250, 250, 250, 0.95)',
                                         color: '#09090b',
                                         font: {
                                             size: 11,
-                                            weight: 500
+                                            weight: 600
                                         },
-                                        padding: 4,
+                                        padding: 6,
                                         borderRadius: 4
                                     }
                                 }
