@@ -48,38 +48,97 @@
             font-weight: 400;
         }
         
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         /* Current Price Card */
-        .price-card {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
-            border: 1px solid rgba(34, 197, 94, 0.2);
+        .stat-card {
+            background: #18181b;
+            border: 1px solid #27272a;
             border-radius: 12px;
             padding: 20px 24px;
-            margin-bottom: 24px;
+        }
+        
+        .stat-card.current {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .stat-card.high {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .stat-card.low {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+        }
+        
+        .stat-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 8px;
         }
         
-        .price-label {
-            font-size: 0.85rem;
+        .stat-label {
+            font-size: 0.8rem;
             color: #a1a1aa;
-            margin-bottom: 4px;
+            font-weight: 500;
         }
         
-        .price-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.75rem;
+        .stat-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
             font-weight: 600;
-            color: #22c55e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .price-badge {
+        .stat-badge.live {
             background: rgba(34, 197, 94, 0.15);
             color: #22c55e;
-            padding: 6px 12px;
-            border-radius: 20px;
+        }
+        
+        .stat-badge.expected {
+            background: rgba(113, 113, 122, 0.2);
+            color: #a1a1aa;
+        }
+        
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .stat-value.current {
+            color: #22c55e;
+        }
+        
+        .stat-value.high {
+            color: #3b82f6;
+        }
+        
+        .stat-value.low {
+            color: #f97316;
+        }
+        
+        .stat-subtext {
             font-size: 0.75rem;
-            font-weight: 500;
+            color: #52525b;
+            margin-top: 6px;
         }
         
         /* Chart Section */
@@ -196,6 +255,64 @@
             padding: 60px 20px;
             color: #ef4444;
         }
+        
+        /* Tooltip */
+        .info-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            margin-left: 4px;
+        }
+        
+        .info-icon {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #3f3f46;
+            color: #a1a1aa;
+            font-size: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .info-tooltip .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: #27272a;
+            color: #e4e4e7;
+            text-align: left;
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.7rem;
+            line-height: 1.5;
+            font-weight: 400;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .info-tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #27272a transparent transparent transparent;
+        }
+        
+        .info-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -206,13 +323,54 @@
             <p class="subtitle">Bitcoin Price Predictions before 2027 · Polymarket</p>
         </div>
         
-        <!-- Current Price Card -->
-        <div class="price-card" id="priceCard" style="display: none;">
-            <div>
-                <div class="price-label">현재 비트코인 가격</div>
-                <div class="price-value" id="currentPrice">--</div>
+        <!-- Stats Grid -->
+        <div class="stats-grid" id="statsGrid" style="display: none;">
+            <!-- Current Price -->
+            <div class="stat-card current">
+                <div class="stat-header">
+                    <span class="stat-label">현재가</span>
+                    <span class="stat-badge live">LIVE</span>
+                </div>
+                <div class="stat-value current" id="currentPrice">--</div>
             </div>
-            <div class="price-badge">LIVE</div>
+            
+            <!-- Expected High -->
+            <div class="stat-card high">
+                <div class="stat-header">
+                    <span class="stat-label">
+                        예상 고점
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-text">
+                                <strong>Expected High</strong><br>
+                                Polymarket 확률을 기반으로 한 marginal probability 방식으로 계산된 2027년까지의 예상 최고가입니다.
+                            </span>
+                        </span>
+                    </span>
+                    <span class="stat-badge expected">E[HIGH]</span>
+                </div>
+                <div class="stat-value high" id="expectedHigh">--</div>
+                <div class="stat-subtext" id="highChange"></div>
+            </div>
+            
+            <!-- Expected Low -->
+            <div class="stat-card low">
+                <div class="stat-header">
+                    <span class="stat-label">
+                        예상 저점
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-text">
+                                <strong>Expected Low</strong><br>
+                                Polymarket 확률을 기반으로 한 marginal probability 방식으로 계산된 2027년까지의 예상 최저가입니다.
+                            </span>
+                        </span>
+                    </span>
+                    <span class="stat-badge expected">E[LOW]</span>
+                </div>
+                <div class="stat-value low" id="expectedLow">--</div>
+                <div class="stat-subtext" id="lowChange"></div>
+            </div>
         </div>
         
         <!-- Chart Section -->
@@ -266,11 +424,39 @@
                 
                 const data = await response.json();
                 
-                // Show current price
+                // Show stats grid
+                document.getElementById('statsGrid').style.display = 'grid';
+                
+                // Current price
                 if (data.current_price) {
-                    document.getElementById('priceCard').style.display = 'flex';
                     document.getElementById('currentPrice').textContent = 
                         '$' + data.current_price.toLocaleString();
+                }
+                
+                // Expected high
+                if (data.expected_high) {
+                    document.getElementById('expectedHigh').textContent = 
+                        '$' + data.expected_high.toLocaleString();
+                    
+                    // Calculate % change from current
+                    if (data.current_price) {
+                        const highChange = ((data.expected_high - data.current_price) / data.current_price * 100).toFixed(1);
+                        document.getElementById('highChange').textContent = 
+                            `현재가 대비 +${highChange}%`;
+                    }
+                }
+                
+                // Expected low
+                if (data.expected_low) {
+                    document.getElementById('expectedLow').textContent = 
+                        '$' + data.expected_low.toLocaleString();
+                    
+                    // Calculate % change from current
+                    if (data.current_price) {
+                        const lowChange = ((data.expected_low - data.current_price) / data.current_price * 100).toFixed(1);
+                        document.getElementById('lowChange').textContent = 
+                            `현재가 대비 ${lowChange}%`;
+                    }
                 }
                 
                 // Render chart
