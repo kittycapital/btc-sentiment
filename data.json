@@ -1,107 +1,115 @@
 {
-  "markets": [
+  "upside": [
     {
-      "price_target": 55000,
-      "probability": 35.5,
-      "volume": 512551.992836,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "price_target": 65000,
-      "probability": 50.5,
-      "volume": 774020.120335,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "price_target": 75000,
-      "probability": 67.5,
-      "volume": 680090.434933,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "price_target": 85000,
+      "price": 90000,
       "probability": 100.0,
-      "volume": 12392.22213,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 90000,
-      "probability": 100.0,
-      "volume": 23188.851454,
-      "end_date": "2027-01-01T05:00:00Z"
-    },
-    {
-      "price_target": 100000,
+      "price": 100000,
       "probability": 81.5,
-      "volume": 283625.594194,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 110000,
+      "price": 110000,
       "probability": 60.0,
-      "volume": 163638.824289,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 120000,
+      "price": 120000,
       "probability": 45.0,
-      "volume": 191060.850553,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 130000,
+      "price": 130000,
       "probability": 36.5,
-      "volume": 301169.735201,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 140000,
+      "price": 140000,
       "probability": 29.0,
-      "volume": 314880.794073,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 150000,
-      "probability": 0.0,
-      "volume": 1555669.585882,
-      "end_date": ""
+      "price": 150000,
+      "probability": 22.0,
+      "type": "up"
     },
     {
-      "price_target": 160000,
+      "price": 160000,
       "probability": 18.0,
-      "volume": 151844.012157,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 170000,
+      "price": 170000,
       "probability": 14.0,
-      "volume": 113272.790504,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 180000,
+      "price": 180000,
       "probability": 12.0,
-      "volume": 227756.909061,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 190000,
+      "price": 190000,
       "probability": 11.5,
-      "volume": 214178.208513,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 200000,
+      "price": 200000,
       "probability": 9.5,
-      "volume": 383992.464226,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     },
     {
-      "price_target": 250000,
+      "price": 250000,
       "probability": 6.0,
-      "volume": 259256.824702,
-      "end_date": "2027-01-01T05:00:00Z"
+      "type": "up"
     }
   ],
-  "last_updated": "2026-01-21T07:05:14.410696Z"
+  "downside": [
+    {
+      "price": 15000,
+      "probability": 4.7,
+      "type": "down"
+    },
+    {
+      "price": 25000,
+      "probability": 8.5,
+      "type": "down"
+    },
+    {
+      "price": 35000,
+      "probability": 13.5,
+      "type": "down"
+    },
+    {
+      "price": 45000,
+      "probability": 23.5,
+      "type": "down"
+    },
+    {
+      "price": 55000,
+      "probability": 35.5,
+      "type": "down"
+    },
+    {
+      "price": 65000,
+      "probability": 51.0,
+      "type": "down"
+    },
+    {
+      "price": 75000,
+      "probability": 67.5,
+      "type": "down"
+    },
+    {
+      "price": 85000,
+      "probability": 100.0,
+      "type": "down"
+    }
+  ],
+  "current_price": 89253,
+  "event_title": "What price will Bitcoin hit in 2026?",
+  "end_date": "2027-01-01T05:00:00Z",
+  "last_updated": "2026-01-21T08:23:00.336073Z"
 }
