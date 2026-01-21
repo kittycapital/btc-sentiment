@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>비트코인 시장 센티먼트</title>
+    <title>비트코인 가격 예측</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -44,26 +45,26 @@
             color: #71717a;
         }
         
-        /* Markets Section */
-        .markets-section {
+        /* Chart Section */
+        .chart-section {
             background: #18181b;
             border: 1px solid #27272a;
             border-radius: 12px;
-            padding: 20px;
+            padding: 24px;
             margin-bottom: 24px;
         }
         
-        .section-title {
+        .chart-title {
             font-size: 1rem;
             font-weight: 600;
             color: #ffffff;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .section-title::before {
+        .chart-title::before {
             content: '';
             width: 4px;
             height: 16px;
@@ -71,96 +72,16 @@
             border-radius: 2px;
         }
         
-        /* Market Item */
-        .market-item {
-            background: #0a0a0f;
-            border: 1px solid #27272a;
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: border-color 0.2s;
+        .chart-container {
+            height: 350px;
+            position: relative;
         }
         
-        .market-item:hover {
-            border-color: #3f3f46;
-        }
-        
-        .market-item:last-child {
-            margin-bottom: 0;
-        }
-        
-        .market-question {
-            font-size: 0.9rem;
-            color: #e5e5e5;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-        
-        .market-data {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .probability {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.5rem;
-            font-weight: 600;
-            min-width: 70px;
-        }
-        
-        .probability.high {
-            color: #22c55e;
-        }
-        
-        .probability.medium {
-            color: #eab308;
-        }
-        
-        .probability.low {
-            color: #ef4444;
-        }
-        
-        .prob-bar-container {
-            flex: 1;
-            height: 8px;
-            background: #27272a;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .prob-bar {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-        
-        .prob-bar.high {
-            background: linear-gradient(90deg, #22c55e, #4ade80);
-        }
-        
-        .prob-bar.medium {
-            background: linear-gradient(90deg, #eab308, #facc15);
-        }
-        
-        .prob-bar.low {
-            background: linear-gradient(90deg, #ef4444, #f87171);
-        }
-        
-        .market-meta {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 12px;
+        .chart-note {
+            margin-top: 16px;
             font-size: 0.75rem;
             color: #52525b;
-        }
-        
-        .volume {
-            color: #71717a;
-        }
-        
-        .end-date {
-            color: #71717a;
+            text-align: center;
         }
         
         /* Footer */
@@ -188,7 +109,7 @@
         /* Loading */
         .loading {
             text-align: center;
-            padding: 60px 20px;
+            padding: 100px 20px;
             color: #71717a;
         }
         
@@ -209,18 +130,11 @@
         /* Error */
         .error {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             color: #ef4444;
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
             border-radius: 12px;
-        }
-        
-        /* No data */
-        .no-data {
-            text-align: center;
-            padding: 40px 20px;
-            color: #71717a;
         }
     </style>
 </head>
@@ -228,11 +142,11 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1 class="title">비트코인 시장 센티먼트</h1>
-            <p class="subtitle">Bitcoin Market Sentiment from Polymarket</p>
+            <h1 class="title">비트코인 가격 예측</h1>
+            <p class="subtitle">Bitcoin Price Predictions from Polymarket</p>
         </div>
         
-        <!-- Content will be loaded here -->
+        <!-- Content -->
         <div id="content">
             <div class="loading">
                 <div class="loading-spinner"></div>
@@ -251,6 +165,13 @@
     </div>
 
     <script>
+        // Chart.js defaults
+        Chart.defaults.color = '#71717a';
+        Chart.defaults.borderColor = '#27272a';
+        Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+        
+        let chart = null;
+        
         async function loadData() {
             const contentEl = document.getElementById('content');
             
@@ -263,7 +184,11 @@
                 
                 const data = await response.json();
                 
-                renderContent(data.markets);
+                if (!data.markets || data.markets.length === 0) {
+                    throw new Error('No market data');
+                }
+                
+                renderChart(data.markets);
                 
                 // Update timestamp
                 if (data.last_updated) {
@@ -289,65 +214,101 @@
             }
         }
         
-        function renderContent(markets) {
+        function renderChart(markets) {
             const contentEl = document.getElementById('content');
             
-            if (!markets || markets.length === 0) {
-                contentEl.innerHTML = `
-                    <div class="no-data">
-                        <p>현재 활성화된 비트코인 예측 시장이 없습니다.</p>
-                    </div>
-                `;
-                return;
-            }
+            // Prepare data
+            const labels = markets.map(m => '$' + (m.price_target / 1000) + 'K');
+            const probabilities = markets.map(m => m.probability);
             
-            // Build markets HTML
-            let marketsHTML = '';
-            
-            markets.forEach(market => {
-                const prob = market.probability;
-                const probClass = prob >= 60 ? 'high' : prob >= 30 ? 'medium' : 'low';
-                
-                const endDateStr = market.end_date ? 
-                    new Date(market.end_date).toLocaleDateString('ko-KR', { 
-                        year: 'numeric', 
-                        month: 'short', 
-                        day: 'numeric' 
-                    }) : '';
-                
-                marketsHTML += `
-                    <div class="market-item">
-                        <div class="market-question">${market.question}</div>
-                        <div class="market-data">
-                            <span class="probability ${probClass}">${prob.toFixed(0)}%</span>
-                            <div class="prob-bar-container">
-                                <div class="prob-bar ${probClass}" style="width: ${prob}%"></div>
-                            </div>
-                        </div>
-                        <div class="market-meta">
-                            <span class="volume">Volume: $${formatVolume(market.volume)}</span>
-                            ${endDateStr ? `<span class="end-date">만료: ${endDateStr}</span>` : ''}
-                        </div>
-                    </div>
-                `;
+            // Create gradient colors based on probability
+            const colors = probabilities.map(prob => {
+                if (prob >= 60) return '#22c55e';  // Green - high
+                if (prob >= 30) return '#eab308';  // Yellow - medium
+                return '#ef4444';  // Red - low
             });
             
             contentEl.innerHTML = `
-                <div class="markets-section">
-                    <h2 class="section-title">비트코인 예측 시장</h2>
-                    ${marketsHTML}
+                <div class="chart-section">
+                    <h2 class="chart-title">가격 목표별 도달 확률</h2>
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                    <p class="chart-note">X축: 비트코인 가격 목표 | Y축: 도달 확률 (%)</p>
                 </div>
             `;
-        }
-        
-        function formatVolume(volume) {
-            if (!volume) return '0';
-            if (volume >= 1000000) {
-                return (volume / 1000000).toFixed(1) + 'M';
-            } else if (volume >= 1000) {
-                return (volume / 1000).toFixed(0) + 'K';
-            }
-            return volume.toFixed(0);
+            
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '도달 확률',
+                        data: probabilities,
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 0,
+                        borderRadius: 6,
+                        barThickness: 50,
+                        maxBarThickness: 60
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#27272a',
+                            titleColor: '#e5e5e5',
+                            bodyColor: '#e5e5e5',
+                            borderColor: '#3f3f46',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                title: (items) => 'Bitcoin ' + items[0].label,
+                                label: (item) => '도달 확률: ' + item.raw.toFixed(1) + '%'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'JetBrains Mono', monospace",
+                                    size: 12,
+                                    weight: 500
+                                },
+                                color: '#a1a1aa'
+                            }
+                        },
+                        y: {
+                            min: 0,
+                            max: 100,
+                            grid: {
+                                color: '#27272a',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'JetBrains Mono', monospace",
+                                    size: 11
+                                },
+                                callback: (value) => value + '%',
+                                stepSize: 20
+                            }
+                        }
+                    }
+                }
+            });
         }
         
         // Load data on page load
