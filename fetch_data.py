@@ -1,6 +1,7 @@
 """
 Bitcoin Market Sentiment - Data Fetcher
-Fetches Bitcoin prediction markets from Polymarket API
+Fetches Bitcoin price prediction markets from Polymarket API
+Only shows price target predictions (e.g. Bitcoin $100K, $150K)
 """
 
 import json
@@ -45,7 +46,7 @@ def is_expired(end_date_str):
 
 
 def fetch_polymarket_btc_markets():
-    """Fetch Bitcoin-related prediction markets from Polymarket"""
+    """Fetch Bitcoin price prediction markets from Polymarket"""
     
     print("📡 Fetching Polymarket Bitcoin markets...")
     
@@ -63,7 +64,7 @@ def fetch_polymarket_btc_markets():
         
         print(f"   ✅ Got {len(events)} crypto events")
         
-        # Filter for Bitcoin markets
+        # Filter for Bitcoin price markets
         btc_markets = []
         
         for event in events:
@@ -73,9 +74,15 @@ def fetch_polymarket_btc_markets():
             if 'bitcoin' not in title and 'btc' not in title:
                 continue
             
+            # Only price prediction markets
+            if 'price' not in title and 'hit' not in title:
+                continue
+            
             # Skip daily/hourly/short-term markets
-            skip_keywords = ['today', 'hour', 'up or down', 'tomorrow', 'january 2', 
-                           'december 2', 'december 3', 'january 3', 'weekly', 'daily']
+            skip_keywords = ['today', 'hour', 'up or down', 'tomorrow', 
+                           'january 2', 'january 3', 'january 4', 'january 5',
+                           'january 6', 'january 7', 'january 8', 'january 9',
+                           'december', 'weekly', 'daily', 'this week']
             if any(skip in title for skip in skip_keywords):
                 continue
             
@@ -104,6 +111,14 @@ def fetch_polymarket_btc_markets():
                                 if price_target:
                                     break
                         
+                        # Skip if no price target found
+                        if not price_target:
+                            continue
+                        
+                        # Skip unrealistic targets (below 50K or above 500K)
+                        if price_target < 50000 or price_target > 500000:
+                            continue
+                        
                         # Find "Yes" probability
                         yes_index = None
                         for i, outcome in enumerate(outcomes):
@@ -115,14 +130,7 @@ def fetch_polymarket_btc_markets():
                             prob = float(prices[yes_index]) * 100
                             volume = float(market.get('volume') or 0)
                             
-                            # Create display question
-                            if price_target:
-                                display_question = f"Bitcoin ${price_target:,} 도달"
-                            else:
-                                display_question = market_question or event.get('title', '')
-                            
                             btc_markets.append({
-                                'question': display_question,
                                 'price_target': price_target,
                                 'probability': round(prob, 1),
                                 'volume': volume,
@@ -134,16 +142,16 @@ def fetch_polymarket_btc_markets():
         # Remove duplicates (same price target, keep highest volume)
         unique_markets = {}
         for m in btc_markets:
-            key = m.get('price_target') or m['question']
+            key = m['price_target']
             if key not in unique_markets or m['volume'] > unique_markets[key]['volume']:
                 unique_markets[key] = m
         
         btc_markets = list(unique_markets.values())
         
-        # Sort by price target (if available) then by volume
-        btc_markets.sort(key=lambda x: (x.get('price_target') or 0, -x['volume']))
+        # Sort by price target (low to high)
+        btc_markets.sort(key=lambda x: x['price_target'])
         
-        print(f"   ✅ Found {len(btc_markets)} Bitcoin markets")
+        print(f"   ✅ Found {len(btc_markets)} Bitcoin price markets")
         
         return btc_markets
         
@@ -174,9 +182,10 @@ def main():
     print(f"\n💾 Saved {len(markets)} markets to {DATA_FILE}")
     
     # Print summary
-    print("\n📊 Markets:")
+    print("\n📊 Price Targets:")
     for m in markets:
-        print(f"   • {m['question']} → {m['probability']}%")
+        price_label = f"${m['price_target']:,}"
+        print(f"   • {price_label} → {m['probability']}%")
 
 
 if __name__ == '__main__':
