@@ -2,47 +2,47 @@
   "upside": [
     {
       "price": 100000,
-      "probability": 80.5,
+      "probability": 76.5,
       "type": "up"
     },
     {
       "price": 110000,
-      "probability": 57.5,
+      "probability": 53.0,
       "type": "up"
     },
     {
       "price": 120000,
-      "probability": 44.0,
+      "probability": 38.5,
       "type": "up"
     },
     {
       "price": 130000,
-      "probability": 28.5,
+      "probability": 27.0,
       "type": "up"
     },
     {
       "price": 140000,
-      "probability": 23.5,
+      "probability": 22.0,
       "type": "up"
     },
     {
       "price": 150000,
-      "probability": 19.5,
+      "probability": 16.5,
       "type": "up"
     },
     {
       "price": 160000,
-      "probability": 16.0,
+      "probability": 15.0,
       "type": "up"
     },
     {
       "price": 170000,
-      "probability": 12.0,
+      "probability": 11.0,
       "type": "up"
     },
     {
       "price": 180000,
-      "probability": 10.0,
+      "probability": 8.5,
       "type": "up"
     },
     {
@@ -64,34 +64,34 @@
     },
     {
       "price": 35000,
-      "probability": 14.5,
+      "probability": 15.5,
       "type": "down"
     },
     {
       "price": 45000,
-      "probability": 23.5,
+      "probability": 24.5,
       "type": "down"
     },
     {
       "price": 55000,
-      "probability": 36.5,
+      "probability": 41.0,
       "type": "down"
     },
     {
       "price": 65000,
-      "probability": 54.5,
+      "probability": 57.0,
       "type": "down"
     },
     {
       "price": 75000,
-      "probability": 69.5,
+      "probability": 74.0,
       "type": "down"
     }
   ],
-  "current_price": 87910,
-  "expected_high": 120542.0,
-  "expected_low": 65188.0,
+  "current_price": 83999,
+  "expected_high": 118990.0,
+  "expected_low": 62690.0,
   "event_title": "What price will Bitcoin hit in 2026?",
   "end_date": "2027-01-01T05:00:00Z",
-  "last_updated": "2026-01-29T14:11:12.812758Z"
+  "last_updated": "2026-01-29T19:39:11.495873Z"
 }
