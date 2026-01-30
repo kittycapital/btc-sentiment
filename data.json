@@ -2,37 +2,37 @@
   "upside": [
     {
       "price": 100000,
-      "probability": 70.5,
+      "probability": 71.0,
       "type": "up"
     },
     {
       "price": 110000,
-      "probability": 51.5,
+      "probability": 52.0,
       "type": "up"
     },
     {
       "price": 120000,
-      "probability": 33.0,
+      "probability": 33.5,
       "type": "up"
     },
     {
       "price": 130000,
-      "probability": 24.5,
+      "probability": 24.0,
       "type": "up"
     },
     {
       "price": 140000,
-      "probability": 21.0,
+      "probability": 20.5,
       "type": "up"
     },
     {
       "price": 150000,
-      "probability": 15.5,
+      "probability": 16.0,
       "type": "up"
     },
     {
       "price": 160000,
-      "probability": 15.0,
+      "probability": 14.0,
       "type": "up"
     },
     {
@@ -64,12 +64,12 @@
     },
     {
       "price": 35000,
-      "probability": 16.0,
+      "probability": 15.0,
       "type": "down"
     },
     {
       "price": 45000,
-      "probability": 26.0,
+      "probability": 25.0,
       "type": "down"
     },
     {
@@ -79,19 +79,19 @@
     },
     {
       "price": 65000,
-      "probability": 63.5,
+      "probability": 63.0,
       "type": "down"
     },
     {
       "price": 75000,
-      "probability": 77.0,
+      "probability": 77.5,
       "type": "down"
     }
   ],
-  "current_price": 82847,
-  "expected_high": 114740.0,
-  "expected_low": 61005.0,
+  "current_price": 82715,
+  "expected_high": 114737.0,
+  "expected_low": 61186.0,
   "event_title": "What price will Bitcoin hit in 2026?",
   "end_date": "2027-01-01T05:00:00Z",
-  "last_updated": "2026-01-30T04:57:46.698549Z"
+  "last_updated": "2026-01-30T07:55:42.842463Z"
 }
