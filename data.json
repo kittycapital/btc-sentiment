@@ -2,47 +2,47 @@
   "upside": [
     {
       "price": 100000,
-      "probability": 55.5,
+      "probability": 57.5,
       "type": "up"
     },
     {
       "price": 110000,
-      "probability": 37.5,
+      "probability": 41.0,
       "type": "up"
     },
     {
       "price": 120000,
-      "probability": 29.5,
+      "probability": 34.0,
       "type": "up"
     },
     {
       "price": 130000,
-      "probability": 19.0,
+      "probability": 22.5,
       "type": "up"
     },
     {
       "price": 140000,
-      "probability": 16.5,
+      "probability": 17.5,
       "type": "up"
     },
     {
       "price": 150000,
-      "probability": 13.5,
+      "probability": 14.5,
       "type": "up"
     },
     {
       "price": 160000,
-      "probability": 13.0,
+      "probability": 12.5,
       "type": "up"
     },
     {
       "price": 170000,
-      "probability": 10.0,
+      "probability": 9.5,
       "type": "up"
     },
     {
       "price": 180000,
-      "probability": 9.0,
+      "probability": 8.5,
       "type": "up"
     },
     {
@@ -59,27 +59,27 @@
   "downside": [
     {
       "price": 25000,
-      "probability": 10.5,
+      "probability": 9.5,
       "type": "down"
     },
     {
       "price": 35000,
-      "probability": 17.5,
+      "probability": 16.0,
       "type": "down"
     },
     {
       "price": 45000,
-      "probability": 28.5,
+      "probability": 26.5,
       "type": "down"
     },
     {
       "price": 55000,
-      "probability": 54.5,
+      "probability": 50.5,
       "type": "down"
     },
     {
       "price": 65000,
-      "probability": 73.5,
+      "probability": 71.0,
       "type": "down"
     },
     {
@@ -88,10 +88,10 @@
       "type": "down"
     }
   ],
-  "current_price": 77955,
-  "expected_high": 106690.0,
-  "expected_low": 56550.0,
+  "current_price": 78646,
+  "expected_high": 108625.0,
+  "expected_low": 57650.0,
   "event_title": "What price will Bitcoin hit in 2026?",
   "end_date": "2027-01-01T05:00:00Z",
-  "last_updated": "2026-02-02T14:25:43.890648Z"
+  "last_updated": "2026-02-03T05:06:30.260431Z"
 }
