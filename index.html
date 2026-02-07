@@ -823,9 +823,23 @@
             const colors = allData.map(d => d.dir === 'up' ? greenColor : redColor);
             const bgColors = allData.map(d => d.dir === 'up' ? 'rgba(0,230,138,0.7)' : 'rgba(255,82,82,0.7)');
 
-            // Current price line position
-            const lastDownIdx = tfData.downside.length - 1;
-            const linePos = lastDownIdx + 0.5;
+            // Current price line position - interpolate based on actual price
+            const currentP = asset.current_price;
+            const prices = allData.map(d => d.price);
+            let linePos = 0;
+            if (currentP <= prices[0]) {
+                linePos = 0;
+            } else if (currentP >= prices[prices.length - 1]) {
+                linePos = prices.length - 1;
+            } else {
+                for (let i = 0; i < prices.length - 1; i++) {
+                    if (currentP >= prices[i] && currentP <= prices[i + 1]) {
+                        const ratio = (currentP - prices[i]) / (prices[i + 1] - prices[i]);
+                        linePos = i + ratio;
+                        break;
+                    }
+                }
+            }
 
             // Timeframe accent
             const tfAccents = { weekly: '#00e68a', monthly: '#4d8eff', yearly: '#ff8a4d' };
