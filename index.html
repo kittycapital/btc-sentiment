@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>크립토 가격 예측 대시보드</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
@@ -20,32 +20,29 @@
             --text-secondary: #7a7a8a;
             --text-muted: #4a4a58;
             --accent-green: #00e68a;
-            --accent-green-dim: rgba(0, 230, 138, 0.12);
             --accent-blue: #4d8eff;
-            --accent-blue-dim: rgba(77, 142, 255, 0.12);
             --accent-orange: #ff8a4d;
-            --accent-orange-dim: rgba(255, 138, 77, 0.12);
             --accent-red: #ff5252;
-            --accent-red-dim: rgba(255, 82, 82, 0.12);
-            --accent-purple: #a78bfa;
             --radius: 14px;
             --radius-sm: 8px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; overflow-x: hidden; max-width: 100vw; }
 
         body {
-            background: var(--bg-root);
+            background: var(--bg-root) !important;
             color: var(--text-primary);
             font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            min-height: 0;
         }
 
         .container {
             max-width: 1040px;
             margin: 0 auto;
-            padding: 28px 20px 40px;
+            padding: 20px 16px 32px;
         }
 
         /* ── Header ─────────────────────────── */
@@ -53,44 +50,46 @@
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
+            gap: 8px;
         }
 
         .header-left h1 {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
             letter-spacing: -0.03em;
             color: var(--text-primary);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .header-left p {
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             color: var(--text-secondary);
             font-weight: 400;
         }
 
         .update-badge {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
             background: var(--bg-card);
             border: 1px solid var(--border);
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 20px;
             white-space: nowrap;
-            margin-top: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
         /* ── Asset Tabs ─────────────────────── */
         .asset-tabs {
             display: flex;
-            gap: 6px;
-            margin-bottom: 24px;
+            gap: 4px;
+            margin-bottom: 16px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 5px;
+            padding: 4px;
         }
 
         .asset-tab {
@@ -98,91 +97,74 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 12px 16px;
+            gap: 6px;
+            padding: 10px 8px;
             border-radius: 9px;
             border: none;
             background: transparent;
             color: var(--text-secondary);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
-            position: relative;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
-        .asset-tab:hover {
-            color: var(--text-primary);
-            background: rgba(255,255,255,0.03);
-        }
-
-        .asset-tab.active {
-            background: var(--border-light);
-            color: var(--text-primary);
-            font-weight: 600;
-        }
+        .asset-tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+        .asset-tab.active { background: var(--border-light); color: var(--text-primary); font-weight: 600; }
 
         .tab-price {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             font-weight: 500;
             opacity: 0.7;
         }
 
-        .tab-symbol {
-            font-weight: 700;
-            letter-spacing: 0.02em;
-        }
+        .tab-symbol { font-weight: 700; letter-spacing: 0.02em; }
 
         /* ── Range Overview ─────────────────── */
         .range-overview {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-
-        @media (max-width: 680px) {
-            .range-overview {
-                grid-template-columns: 1fr;
-            }
-        }
+        .range-overview::-webkit-scrollbar { display: none; }
 
         .range-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 18px 20px;
+            padding: 14px 16px;
             cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+            flex: 1 0 0;
+            min-width: 0;
+            scroll-snap-align: start;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .range-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 2px;
             opacity: 0;
             transition: opacity 0.2s ease;
         }
 
-        .range-card:hover {
-            border-color: var(--border-light);
-            background: var(--bg-card-hover);
-        }
-
-        .range-card.active {
-            border-color: var(--border-light);
-        }
-
-        .range-card.active::before {
-            opacity: 1;
-        }
+        .range-card:hover { border-color: var(--border-light); background: var(--bg-card-hover); }
+        .range-card.active { border-color: var(--border-light); }
+        .range-card.active::before { opacity: 1; }
 
         .range-card[data-tf="weekly"]::before { background: var(--accent-green); }
         .range-card[data-tf="monthly"]::before { background: var(--accent-blue); }
@@ -192,11 +174,11 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .range-tf-label {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -206,37 +188,19 @@
         .range-card[data-tf="monthly"] .range-tf-label { color: var(--accent-blue); }
         .range-card[data-tf="yearly"] .range-tf-label { color: var(--accent-orange); }
 
-        .range-period {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
+        .range-period { font-size: 0.65rem; color: var(--text-muted); font-weight: 400; }
 
-        /* Range bar visualization */
-        .range-bar-container {
-            position: relative;
-            height: 32px;
-            margin-bottom: 12px;
-        }
+        .range-bar-container { position: relative; height: 28px; margin-bottom: 10px; }
 
         .range-bar-track {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--border);
-            border-radius: 2px;
+            position: absolute; top: 50%; left: 0; right: 0;
+            height: 3px; background: var(--border); border-radius: 2px;
             transform: translateY(-50%);
         }
 
         .range-bar-fill {
-            position: absolute;
-            top: 50%;
-            height: 5px;
-            border-radius: 3px;
-            transform: translateY(-50%);
-            opacity: 0.6;
+            position: absolute; top: 50%; height: 5px; border-radius: 3px;
+            transform: translateY(-50%); opacity: 0.6;
         }
 
         .range-card[data-tf="weekly"] .range-bar-fill { background: var(--accent-green); }
@@ -244,292 +208,209 @@
         .range-card[data-tf="yearly"] .range-bar-fill { background: var(--accent-orange); }
 
         .range-bar-current {
-            position: absolute;
-            top: 50%;
-            width: 10px;
-            height: 10px;
-            background: var(--text-primary);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
+            position: absolute; top: 50%;
+            width: 9px; height: 9px;
+            background: var(--text-primary); border-radius: 50%;
+            transform: translate(-50%, -50%); z-index: 2;
             box-shadow: 0 0 0 3px var(--bg-card);
         }
 
-        .range-values {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
+        .range-values { display: flex; justify-content: space-between; align-items: baseline; }
 
-        .range-val {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            font-weight: 500;
-        }
-
+        .range-val { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; }
         .range-val.low { color: var(--accent-red); }
         .range-val.high { color: var(--accent-green); }
 
         .range-val-label {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            font-weight: 400;
-            font-family: 'Outfit', sans-serif;
-            margin-left: 4px;
+            font-size: 0.6rem; color: var(--text-muted); font-weight: 400;
+            font-family: 'Outfit', sans-serif; margin-left: 3px;
         }
 
-        .range-no-data {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            padding: 20px 0;
-        }
+        .range-no-data { text-align: center; color: var(--text-muted); font-size: 0.78rem; padding: 16px 0; }
 
         /* ── Chart Section ──────────────────── */
         .chart-section {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
-            margin-bottom: 20px;
+            padding: 18px;
+            margin-bottom: 16px;
         }
 
         .chart-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            align-items: flex-start;
+            margin-bottom: 16px;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .chart-title-group h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 3px;
-        }
+        .chart-title-group h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+        .chart-title-group p { font-size: 0.72rem; color: var(--text-secondary); }
 
-        .chart-title-group p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .chart-legend {
-            display: flex;
-            gap: 16px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .legend-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 3px;
-        }
-
+        .chart-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .chart-legend { display: flex; gap: 12px; }
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--text-secondary); }
+        .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
         .legend-dot.up { background: var(--accent-green); }
         .legend-dot.down { background: var(--accent-red); }
 
+        /* Horizontal scroll wrapper for chart on mobile */
+        .chart-scroll-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            margin: 0 -4px;
+            padding: 0 4px;
+        }
+        .chart-scroll-wrap::-webkit-scrollbar { display: none; }
+
         .chart-canvas-wrap {
-            height: 360px;
+            height: 320px;
             position: relative;
+            min-width: 100%;
         }
 
-        @media (max-width: 640px) {
-            .chart-canvas-wrap { height: 280px; }
-        }
-
-        /* ── Timeframe Tabs (inside chart) ──── */
-        .tf-tabs {
-            display: flex;
-            gap: 4px;
-            background: var(--bg-root);
-            border-radius: 8px;
-            padding: 3px;
-        }
+        /* ── Timeframe Tabs ─────────────────── */
+        .tf-tabs { display: flex; gap: 3px; background: var(--bg-root); border-radius: 8px; padding: 3px; }
 
         .tf-tab {
-            padding: 6px 14px;
-            border-radius: 6px;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s ease;
+            padding: 5px 12px; border-radius: 6px; border: none;
+            background: transparent; color: var(--text-muted);
+            font-family: 'Outfit', sans-serif; font-size: 0.72rem; font-weight: 500;
+            cursor: pointer; transition: all 0.15s ease;
+            -webkit-tap-highlight-color: transparent; touch-action: manipulation;
         }
 
         .tf-tab:hover { color: var(--text-secondary); }
-        .tf-tab.active {
-            background: var(--border-light);
-            color: var(--text-primary);
-            font-weight: 600;
-        }
+        .tf-tab.active { background: var(--border-light); color: var(--text-primary); font-weight: 600; }
 
         /* ── Probability Table ──────────────── */
         .prob-section {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
-            margin-bottom: 20px;
-        }
-
-        .prob-section h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
+            padding: 18px;
             margin-bottom: 16px;
         }
 
-        .prob-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
+        .prob-section h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 14px; }
 
-        @media (max-width: 640px) {
-            .prob-grid { grid-template-columns: 1fr; }
-        }
+        .prob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
         .prob-col-title {
-            font-size: 0.72rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.08em; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 5px;
         }
-
         .prob-col-title.up { color: var(--accent-green); }
         .prob-col-title.down { color: var(--accent-red); }
 
         .prob-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.03); gap: 8px;
         }
-
         .prob-row:last-child { border-bottom: none; }
 
         .prob-price {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            font-weight: 500; color: var(--text-primary); white-space: nowrap; flex-shrink: 0;
         }
 
-        .prob-bar-wrap {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            max-width: 180px;
-        }
+        .prob-bar-wrap { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
 
-        .prob-bar-bg {
-            flex: 1;
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .prob-bar-fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 0.4s ease;
-        }
-
+        .prob-bar-bg { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; min-width: 30px; }
+        .prob-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
         .prob-bar-fill.up { background: var(--accent-green); }
         .prob-bar-fill.down { background: var(--accent-red); }
 
         .prob-pct {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--text-secondary);
-            min-width: 38px;
-            text-align: right;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+            color: var(--text-secondary); min-width: 34px; text-align: right; flex-shrink: 0;
         }
 
         /* ── Footer ─────────────────────────── */
         .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            padding-top: 4px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.68rem; color: var(--text-muted); padding-top: 2px; gap: 8px; flex-wrap: wrap;
         }
 
-        .footer-source {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .footer-source { display: flex; align-items: center; gap: 6px; }
 
         .polymarket-tag {
-            background: var(--border);
-            color: var(--text-secondary);
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-weight: 500;
-            font-size: 0.68rem;
+            background: var(--border); color: var(--text-secondary);
+            padding: 3px 8px; border-radius: 4px; font-weight: 500; font-size: 0.64rem;
         }
 
-        /* ── Loading / Error ────────────────── */
+        /* ── Loading ────────────────────────── */
         .loading-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 0;
-            color: var(--text-muted);
-            gap: 12px;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 60px 0; color: var(--text-muted); gap: 10px;
         }
 
         .spinner {
-            width: 28px;
-            height: 28px;
-            border: 2px solid var(--border);
-            border-top-color: var(--text-secondary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            width: 24px; height: 24px;
+            border: 2px solid var(--border); border-top-color: var(--text-secondary);
+            border-radius: 50%; animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── Animations ─────────────────────── */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* ════════════════════════════════════════
+           MOBILE BREAKPOINTS
+           ════════════════════════════════════════ */
+
+        @media (max-width: 768px) {
+            .container { padding: 16px 12px 28px; }
+            .header-left h1 { font-size: 1.2rem; }
+            .chart-canvas-wrap { height: 280px; }
         }
 
-        .fade-in {
-            animation: fadeIn 0.3s ease forwards;
+        @media (max-width: 520px) {
+            .container { padding: 12px 10px 24px; }
+
+            .header { margin-bottom: 14px; }
+            .header-left h1 { font-size: 1.1rem; }
+            .header-left p { font-size: 0.72rem; }
+            .update-badge { font-size: 0.6rem; padding: 4px 8px; }
+
+            .asset-tabs { margin-bottom: 12px; padding: 3px; gap: 2px; }
+            .asset-tab { padding: 9px 4px; font-size: 0.82rem; gap: 5px; }
+            .tab-price { font-size: 0.65rem; }
+
+            /* Range cards: horizontal scroll, each ~72% width */
+            .range-overview { gap: 6px; margin-bottom: 12px; }
+            .range-card { flex: 0 0 72%; min-width: 0; padding: 12px 14px; }
+
+            .chart-section { padding: 14px 12px; margin-bottom: 12px; }
+            .chart-header { gap: 8px; margin-bottom: 12px; }
+            .chart-title-group h3 { font-size: 0.88rem; }
+            .chart-title-group p { font-size: 0.68rem; }
+            .chart-controls { gap: 8px; }
+            .chart-legend { gap: 8px; }
+            .legend-item { font-size: 0.65rem; }
+            .legend-dot { width: 7px; height: 7px; }
+            .tf-tab { padding: 5px 10px; font-size: 0.68rem; }
+            .chart-canvas-wrap { height: 260px; }
+
+            .prob-section { padding: 14px 12px; margin-bottom: 12px; }
+            .prob-section h3 { font-size: 0.85rem; margin-bottom: 10px; }
+            .prob-grid { grid-template-columns: 1fr; gap: 18px; }
+            .prob-col-title { font-size: 0.65rem; }
+            .prob-price { font-size: 0.72rem; }
+            .prob-pct { font-size: 0.65rem; min-width: 30px; }
+            .footer { font-size: 0.62rem; }
         }
 
-        /* ── Mobile ─────────────────────────── */
-        @media (max-width: 480px) {
-            .container { padding: 16px 12px 32px; }
-            .header { flex-direction: column; gap: 8px; }
-            .header-left h1 { font-size: 1.25rem; }
-            .asset-tab { padding: 10px 8px; font-size: 0.8rem; }
+        @media (max-width: 380px) {
+            .container { padding: 10px 8px 20px; }
+            .header-left h1 { font-size: 1rem; }
             .tab-price { display: none; }
-            .chart-section { padding: 16px; }
-            .prob-section { padding: 16px; }
+            .asset-tab { font-size: 0.8rem; padding: 8px 4px; }
+            .range-card { flex: 0 0 78%; }
+            .chart-canvas-wrap { height: 240px; }
         }
     </style>
 </head>
@@ -539,7 +420,7 @@
         <div class="header">
             <div class="header-left">
                 <h1>🔮 크립토 가격 예측</h1>
-                <p>Polymarket 예측 시장 기반 · 주간 / 월간 / 연간 전망</p>
+                <p>Polymarket 예측 시장 기반 · 주간 / 월간 / 연간</p>
             </div>
             <div class="update-badge" id="updateBadge">--</div>
         </div>
@@ -604,7 +485,7 @@
                     <h3 id="chartTitle">도달 확률 분포</h3>
                     <p id="chartSubtitle">각 가격 목표에 도달할 확률</p>
                 </div>
-                <div style="display:flex; align-items:center; gap:16px;">
+                <div class="chart-controls">
                     <div class="chart-legend">
                         <span class="legend-item"><span class="legend-dot up"></span>상승 ↑</span>
                         <span class="legend-item"><span class="legend-dot down"></span>하락 ↓</span>
@@ -616,10 +497,12 @@
                     </div>
                 </div>
             </div>
-            <div class="chart-canvas-wrap" id="chartWrap">
-                <div class="loading-state">
-                    <div class="spinner"></div>
-                    <span>데이터 로딩 중...</span>
+            <div class="chart-scroll-wrap" id="chartScrollWrap">
+                <div class="chart-canvas-wrap" id="chartWrap">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <span>데이터 로딩 중...</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -640,18 +523,15 @@
     </div>
 
     <script>
-        // ── State ───────────────────────────────────────────
         let DATA = null;
         let activeAsset = 'btc';
         let activeTimeframe = 'weekly';
         let chart = null;
 
-        // Chart.js defaults
         Chart.defaults.color = '#4a4a58';
         Chart.defaults.borderColor = '#1a1a22';
         Chart.defaults.font.family = "'Outfit', sans-serif";
 
-        // ── Data Loading ────────────────────────────────────
         async function loadData() {
             try {
                 const resp = await fetch('data.json');
@@ -666,29 +546,22 @@
         }
 
         function initDashboard() {
-            // Update tab prices
             for (const [key, asset] of Object.entries(DATA.assets)) {
                 const el = document.getElementById(`tab-price-${key}`);
                 if (el) el.textContent = formatPrice(asset.current_price, key);
             }
-
-            // Update timestamp
             if (DATA.last_updated) {
                 const d = new Date(DATA.last_updated);
                 const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
                 document.getElementById('updateBadge').textContent =
                     kst.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' KST';
             }
-
-            // Setup tab listeners
             document.querySelectorAll('.asset-tab').forEach(tab => {
                 tab.addEventListener('click', () => selectAsset(tab.dataset.asset));
             });
-
             renderAll();
         }
 
-        // ── Asset & Timeframe Selection ─────────────────────
         function selectAsset(asset) {
             activeAsset = asset;
             document.querySelectorAll('.asset-tab').forEach(t => t.classList.toggle('active', t.dataset.asset === asset));
@@ -703,29 +576,21 @@
             renderProbTable();
         }
 
-        function renderAll() {
-            renderRangeCards();
-            renderChart();
-            renderProbTable();
-        }
+        function renderAll() { renderRangeCards(); renderChart(); renderProbTable(); }
 
-        // ── Format Helpers ──────────────────────────────────
         function formatPrice(val, assetKey) {
             if (val == null) return '--';
-            if (assetKey === 'sol' || (assetKey !== 'btc' && val < 1000)) {
+            if (assetKey === 'sol' || (assetKey !== 'btc' && val < 1000))
                 return '$' + val.toLocaleString('en-US', { maximumFractionDigits: val < 10 ? 2 : 0 });
-            }
             return '$' + val.toLocaleString('en-US', { maximumFractionDigits: 0 });
         }
 
         function formatPriceShort(val, assetKey) {
             if (val == null) return '--';
             if (assetKey === 'sol') return '$' + Math.round(val);
-            if (assetKey === 'eth') {
-                return val >= 10000 ? '$' + (val/1000).toFixed(1) + 'K' : '$' + val.toLocaleString('en-US', {maximumFractionDigits:0});
-            }
-            // BTC
-            if (val >= 1000) return '$' + (val/1000).toFixed(val >= 100000 ? 0 : 1) + 'K';
+            if (assetKey === 'eth')
+                return val >= 10000 ? '$' + (val / 1000).toFixed(1) + 'K' : '$' + val.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            if (val >= 1000) return '$' + (val / 1000).toFixed(val >= 100000 ? 0 : 1) + 'K';
             return '$' + val;
         }
 
@@ -733,7 +598,6 @@
             const tfData = assetData?.timeframes?.[tf];
             if (!tfData) return '--';
             if (tf === 'weekly') {
-                // Extract just the date range
                 const title = tfData.event_title || '';
                 const match = title.match(/((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d[\d\s\-–,]*\d)/i);
                 return match ? match[1] : tfData.period || '--';
@@ -764,25 +628,14 @@
                 periodEl.textContent = getPeriodLabel(tf, asset);
                 lowEl.innerHTML = formatPrice(tfData.expected_low, activeAsset) + '<span class="range-val-label">예상 저점</span>';
                 highEl.innerHTML = formatPrice(tfData.expected_high, activeAsset) + '<span class="range-val-label">예상 고점</span>';
-
-                // Build range bar
-                renderRangeBar(barEl, tfData, asset.current_price, tf);
+                renderRangeBar(barEl, tfData, asset.current_price);
             });
         }
 
-        function renderRangeBar(container, tfData, currentPrice, tf) {
-            if (!tfData.expected_low || !tfData.expected_high) {
-                container.innerHTML = '';
-                return;
-            }
-
-            const low = tfData.expected_low;
-            const high = tfData.expected_high;
-            // Add some padding to the range for visualization
-            const rangeMin = low * 0.92;
-            const rangeMax = high * 1.08;
-            const total = rangeMax - rangeMin;
-
+        function renderRangeBar(container, tfData, currentPrice) {
+            if (!tfData.expected_low || !tfData.expected_high) { container.innerHTML = ''; return; }
+            const low = tfData.expected_low, high = tfData.expected_high;
+            const rangeMin = low * 0.92, rangeMax = high * 1.08, total = rangeMax - rangeMin;
             const fillLeft = ((low - rangeMin) / total * 100).toFixed(1);
             const fillRight = ((rangeMax - high) / total * 100).toFixed(1);
             const fillWidth = (100 - parseFloat(fillLeft) - parseFloat(fillRight)).toFixed(1);
@@ -799,18 +652,27 @@
         function renderChart() {
             const asset = DATA.assets[activeAsset];
             const tfData = asset?.timeframes?.[activeTimeframe];
-
             const wrap = document.getElementById('chartWrap');
+            const scrollWrap = document.getElementById('chartScrollWrap');
 
             if (!tfData || (!tfData.upside.length && !tfData.downside.length)) {
+                wrap.style.minWidth = '100%';
                 wrap.innerHTML = '<div class="loading-state"><span>이 기간의 데이터가 없습니다</span></div>';
                 return;
             }
 
+            // Dynamic width: ensure bars aren't too thin on mobile
+            const totalBars = tfData.downside.length + tfData.upside.length;
+            const isMobile = window.innerWidth <= 520;
+            const minBarWidth = isMobile ? 34 : 40;
+            const containerWidth = scrollWrap.clientWidth;
+            const dynamicMinWidth = Math.max(totalBars * minBarWidth, containerWidth);
+            wrap.style.minWidth = dynamicMinWidth + 'px';
+
             wrap.innerHTML = '<canvas id="mainChart"></canvas>';
             const ctx = document.getElementById('mainChart').getContext('2d');
 
-            // Group: downside sorted low→high on left, upside sorted low→high on right
+            // Downside (left, sorted low→high) then Upside (right, sorted low→high)
             const downSorted = [...tfData.downside].sort((a, b) => a.price - b.price);
             const upSorted = [...tfData.upside].sort((a, b) => a.price - b.price);
             const allData = [
@@ -820,19 +682,13 @@
 
             const labels = allData.map(d => formatPriceShort(d.price, activeAsset));
             const probs = allData.map(d => d.probability);
-            const greenColor = '#00e68a';
-            const redColor = '#ff5252';
-            const colors = allData.map(d => d.dir === 'up' ? greenColor : redColor);
+            const colors = allData.map(d => d.dir === 'up' ? '#00e68a' : '#ff5252');
             const bgColors = allData.map(d => d.dir === 'up' ? 'rgba(0,230,138,0.7)' : 'rgba(255,82,82,0.7)');
-
-            // Current price line sits between last downside bar and first upside bar
             const linePos = downSorted.length - 0.5;
 
-            // Timeframe accent
-            const tfAccents = { weekly: '#00e68a', monthly: '#4d8eff', yearly: '#ff8a4d' };
-            const accent = tfAccents[activeTimeframe] || '#00e68a';
-
             if (chart) chart.destroy();
+
+            const tickSize = isMobile ? 9 : 10;
 
             chart = new Chart(ctx, {
                 type: 'bar',
@@ -843,14 +699,17 @@
                         backgroundColor: bgColors,
                         borderColor: colors,
                         borderWidth: 1,
-                        borderRadius: 4,
+                        borderRadius: isMobile ? 3 : 4,
                         borderSkipped: false
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: { duration: 400, easing: 'easeOutQuart' },
+                    animation: { duration: 350, easing: 'easeOutQuart' },
+                    layout: {
+                        padding: { top: 10, bottom: 0, left: 0, right: 0 }
+                    },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -859,11 +718,11 @@
                             bodyColor: '#eeeef0',
                             borderColor: '#24242e',
                             borderWidth: 1,
-                            padding: 14,
+                            padding: 12,
                             cornerRadius: 8,
                             displayColors: false,
-                            titleFont: { family: "'JetBrains Mono', monospace", size: 12, weight: 600 },
-                            bodyFont: { family: "'Outfit', sans-serif", size: 12 },
+                            titleFont: { family: "'JetBrains Mono', monospace", size: 11, weight: 600 },
+                            bodyFont: { family: "'Outfit', sans-serif", size: 11 },
                             callbacks: {
                                 title: (items) => {
                                     const d = allData[items[0].dataIndex];
@@ -888,8 +747,8 @@
                                         position: 'start',
                                         backgroundColor: 'rgba(238,238,240,0.9)',
                                         color: '#050507',
-                                        font: { size: 10, weight: 600, family: "'Outfit', sans-serif" },
-                                        padding: { x: 8, y: 4 },
+                                        font: { size: isMobile ? 9 : 10, weight: 600, family: "'Outfit', sans-serif" },
+                                        padding: { x: 6, y: 3 },
                                         borderRadius: 4
                                     }
                                 }
@@ -900,10 +759,10 @@
                         x: {
                             grid: { display: false },
                             ticks: {
-                                font: { family: "'JetBrains Mono', monospace", size: 10 },
+                                font: { family: "'JetBrains Mono', monospace", size: tickSize },
                                 color: '#7a7a8a',
                                 maxRotation: 45,
-                                minRotation: 0
+                                minRotation: 45
                             }
                         },
                         y: {
@@ -911,7 +770,7 @@
                             max: 100,
                             grid: { color: 'rgba(26,26,34,0.8)', drawBorder: false },
                             ticks: {
-                                font: { family: "'JetBrains Mono', monospace", size: 10 },
+                                font: { family: "'JetBrains Mono', monospace", size: tickSize },
                                 color: '#4a4a58',
                                 callback: v => v + '%',
                                 stepSize: 25
@@ -921,12 +780,18 @@
                 }
             });
 
-            // Update titles
+            // Titles
             const tfLabels = { weekly: '주간', monthly: '월간', yearly: '연간' };
-            document.getElementById('chartTitle').textContent =
-                `${asset.symbol} ${tfLabels[activeTimeframe]} 도달 확률`;
-            document.getElementById('chartSubtitle').textContent =
-                tfData.event_title || '각 가격 목표에 도달할 확률';
+            document.getElementById('chartTitle').textContent = `${asset.symbol} ${tfLabels[activeTimeframe]} 도달 확률`;
+            document.getElementById('chartSubtitle').textContent = tfData.event_title || '각 가격 목표에 도달할 확률';
+
+            // Auto-scroll to current price line on mobile when chart is wide
+            if (isMobile && dynamicMinWidth > containerWidth) {
+                const scrollTarget = (linePos / totalBars) * dynamicMinWidth - containerWidth / 2;
+                setTimeout(() => {
+                    scrollWrap.scrollTo({ left: Math.max(0, scrollTarget), behavior: 'smooth' });
+                }, 120);
+            }
         }
 
         // ── Probability Table ───────────────────────────────
@@ -941,46 +806,40 @@
             }
 
             const tfLabels = { weekly: '주간', monthly: '월간', yearly: '연간' };
-            document.getElementById('probTitle').textContent =
-                `${asset.symbol} ${tfLabels[activeTimeframe]} 상세 확률`;
+            document.getElementById('probTitle').textContent = `${asset.symbol} ${tfLabels[activeTimeframe]} 상세 확률`;
 
             let html = '';
 
-            // Upside column
             html += '<div>';
             html += '<div class="prob-col-title up">↑ 상승 목표</div>';
             if (tfData.upside.length === 0) {
-                html += '<div style="color:var(--text-muted);font-size:0.8rem;">데이터 없음</div>';
+                html += '<div style="color:var(--text-muted);font-size:0.78rem;">데이터 없음</div>';
             } else {
                 tfData.upside.forEach(d => {
-                    html += `
-                        <div class="prob-row">
-                            <span class="prob-price">${formatPrice(d.price, activeAsset)}</span>
-                            <div class="prob-bar-wrap">
-                                <div class="prob-bar-bg"><div class="prob-bar-fill up" style="width:${d.probability}%"></div></div>
-                                <span class="prob-pct">${d.probability.toFixed(1)}%</span>
-                            </div>
-                        </div>`;
+                    html += `<div class="prob-row">
+                        <span class="prob-price">${formatPrice(d.price, activeAsset)}</span>
+                        <div class="prob-bar-wrap">
+                            <div class="prob-bar-bg"><div class="prob-bar-fill up" style="width:${d.probability}%"></div></div>
+                            <span class="prob-pct">${d.probability.toFixed(1)}%</span>
+                        </div>
+                    </div>`;
                 });
             }
             html += '</div>';
 
-            // Downside column
             html += '<div>';
             html += '<div class="prob-col-title down">↓ 하락 목표</div>';
             if (tfData.downside.length === 0) {
-                html += '<div style="color:var(--text-muted);font-size:0.8rem;">데이터 없음</div>';
+                html += '<div style="color:var(--text-muted);font-size:0.78rem;">데이터 없음</div>';
             } else {
-                // Show highest to lowest
                 [...tfData.downside].reverse().forEach(d => {
-                    html += `
-                        <div class="prob-row">
-                            <span class="prob-price">${formatPrice(d.price, activeAsset)}</span>
-                            <div class="prob-bar-wrap">
-                                <div class="prob-bar-bg"><div class="prob-bar-fill down" style="width:${d.probability}%"></div></div>
-                                <span class="prob-pct">${d.probability.toFixed(1)}%</span>
-                            </div>
-                        </div>`;
+                    html += `<div class="prob-row">
+                        <span class="prob-price">${formatPrice(d.price, activeAsset)}</span>
+                        <div class="prob-bar-wrap">
+                            <div class="prob-bar-bg"><div class="prob-bar-fill down" style="width:${d.probability}%"></div></div>
+                            <span class="prob-pct">${d.probability.toFixed(1)}%</span>
+                        </div>
+                    </div>`;
                 });
             }
             html += '</div>';
@@ -988,7 +847,13 @@
             grid.innerHTML = html;
         }
 
-        // ── Init ────────────────────────────────────────────
+        // Reflow chart on resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => { if (DATA) renderChart(); }, 250);
+        });
+
         loadData();
     </script>
 </body>
