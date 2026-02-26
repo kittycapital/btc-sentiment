@@ -134,8 +134,8 @@ def build_weekly_slug_str(name, start, end):
         # Same month: february-2-8
         return f"what-price-will-{name}-hit-{start_month}-{start.day}-{end.day}"
     else:
-        # Cross-month: january-26-1 (abbreviated end day)
-        return f"what-price-will-{name}-hit-{start_month}-{start.day}-{end.day}"
+        # Cross-month: february-23-march-1
+        return f"what-price-will-{name}-hit-{start_month}-{start.day}-{end_month}-{end.day}"
 
 
 # ─── Polymarket API ───────────────────────────────────────────────────
