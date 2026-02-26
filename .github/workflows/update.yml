@@ -2,9 +2,8 @@ name: Update Crypto Prediction Data
 
 on:
   schedule:
-    # Run every 4 hours (more frequent since weekly data changes faster)
     - cron: '0 */4 * * *'
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:
 
 permissions:
   contents: write
