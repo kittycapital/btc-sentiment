@@ -3,7 +3,7 @@
     "btc": {
       "name": "Bitcoin",
       "symbol": "BTC",
-      "current_price": 63648,
+      "current_price": 63933,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -14,12 +14,12 @@
             },
             {
               "price": 75000.0,
-              "probability": 76.5,
+              "probability": 75.5,
               "type": "up"
             },
             {
               "price": 80000.0,
-              "probability": 65.0,
+              "probability": 68.5,
               "type": "up"
             },
             {
@@ -29,27 +29,27 @@
             },
             {
               "price": 100000.0,
-              "probability": 36.0,
+              "probability": 35.0,
               "type": "up"
             },
             {
               "price": 110000.0,
-              "probability": 23.0,
+              "probability": 24.0,
               "type": "up"
             },
             {
               "price": 120000.0,
-              "probability": 17.0,
+              "probability": 18.0,
               "type": "up"
             },
             {
               "price": 130000.0,
-              "probability": 12.5,
+              "probability": 11.0,
               "type": "up"
             },
             {
               "price": 140000.0,
-              "probability": 10.5,
+              "probability": 11.0,
               "type": "up"
             },
             {
@@ -84,7 +84,7 @@
             },
             {
               "price": 250000.0,
-              "probability": 5.3,
+              "probability": 5.5,
               "type": "up"
             },
             {
@@ -101,12 +101,12 @@
           "downside": [
             {
               "price": 10000.0,
-              "probability": 5.7,
+              "probability": 5.2,
               "type": "down"
             },
             {
               "price": 15000.0,
-              "probability": 8.2,
+              "probability": 7.9,
               "type": "down"
             },
             {
@@ -116,37 +116,37 @@
             },
             {
               "price": 25000.0,
-              "probability": 16.5,
+              "probability": 14.0,
               "type": "down"
             },
             {
               "price": 30000.0,
-              "probability": 18.0,
+              "probability": 19.0,
               "type": "down"
             },
             {
               "price": 35000.0,
-              "probability": 28.5,
+              "probability": 27.0,
               "type": "down"
             },
             {
               "price": 40000.0,
-              "probability": 43.5,
+              "probability": 44.5,
               "type": "down"
             },
             {
               "price": 45000.0,
-              "probability": 54.0,
+              "probability": 50.0,
               "type": "down"
             },
             {
               "price": 50000.0,
-              "probability": 71.0,
+              "probability": 70.5,
               "type": "down"
             },
             {
               "price": 55000.0,
-              "probability": 77.0,
+              "probability": 76.0,
               "type": "down"
             },
             {
@@ -170,8 +170,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 143875.0,
-          "expected_low": 43380.0,
+          "expected_high": 141300.0,
+          "expected_low": 43795.0,
           "period": "2026",
           "event_title": "What price will Bitcoin hit in 2026?",
           "event_slug": "what-price-will-bitcoin-hit-before-2027",
@@ -181,12 +181,12 @@
           "upside": [
             {
               "price": 75000.0,
-              "probability": 0.2,
+              "probability": 0.1,
               "type": "up"
             },
             {
               "price": 80000.0,
-              "probability": 0.2,
+              "probability": 0.1,
               "type": "up"
             },
             {
@@ -258,12 +258,12 @@
             },
             {
               "price": 50000.0,
-              "probability": 0.1,
+              "probability": 0.2,
               "type": "down"
             },
             {
               "price": 55000.0,
-              "probability": 1.6,
+              "probability": 0.8,
               "type": "down"
             },
             {
@@ -292,8 +292,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 63751.0,
-          "expected_low": 59900.0,
+          "expected_high": 64019.0,
+          "expected_low": 59935.0,
           "period": "February 2026",
           "event_title": "What price will Bitcoin hit in February?",
           "event_slug": "what-price-will-bitcoin-hit-in-february-2026",
@@ -308,22 +308,22 @@
             },
             {
               "price": 70000.0,
-              "probability": 2.4,
+              "probability": 1.6,
               "type": "up"
             },
             {
               "price": 72000.0,
-              "probability": 0.7,
+              "probability": 0.9,
               "type": "up"
             },
             {
               "price": 74000.0,
-              "probability": 0.5,
+              "probability": 0.4,
               "type": "up"
             },
             {
               "price": 76000.0,
-              "probability": 0.3,
+              "probability": 0.2,
               "type": "up"
             },
             {
@@ -340,32 +340,32 @@
           "downside": [
             {
               "price": 52000.0,
-              "probability": 1.1,
+              "probability": 1.6,
               "type": "down"
             },
             {
               "price": 54000.0,
-              "probability": 2.5,
+              "probability": 1.1,
               "type": "down"
             },
             {
               "price": 56000.0,
-              "probability": 3.5,
+              "probability": 4.5,
               "type": "down"
             },
             {
               "price": 58000.0,
-              "probability": 9.7,
+              "probability": 9.2,
               "type": "down"
             },
             {
               "price": 60000.0,
-              "probability": 23.4,
+              "probability": 16.1,
               "type": "down"
             },
             {
               "price": 62000.0,
-              "probability": 59.5,
+              "probability": 38.5,
               "type": "down"
             },
             {
@@ -374,8 +374,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 68084.0,
-          "expected_low": 62006.0,
+          "expected_high": 68068.0,
+          "expected_low": 62850.0,
           "period": "Bitcoin February 23-March 1?",
           "event_title": "What price will Bitcoin hit February 23-March 1?",
           "event_slug": "what-price-will-bitcoin-hit-february-23-march-1",
@@ -386,7 +386,7 @@
     "eth": {
       "name": "Ethereum",
       "symbol": "ETH",
-      "current_price": 1858.35,
+      "current_price": 1865.47,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -397,12 +397,12 @@
             },
             {
               "price": 4000.0,
-              "probability": 21.5,
+              "probability": 23.0,
               "type": "up"
             },
             {
               "price": 4500.0,
-              "probability": 17.0,
+              "probability": 17.5,
               "type": "up"
             },
             {
@@ -473,7 +473,7 @@
               "type": "down"
             }
           ],
-          "expected_high": 3007.0,
+          "expected_high": 3022.0,
           "expected_low": 1374.0,
           "period": "2026",
           "event_title": "What price will Ethereum hit in 2026?",
@@ -556,7 +556,7 @@
             },
             {
               "price": 1600.0,
-              "probability": 2.1,
+              "probability": 2.5,
               "type": "down"
             },
             {
@@ -585,8 +585,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 1861.0,
-          "expected_low": 1795.0,
+          "expected_high": 1869.0,
+          "expected_low": 1794.0,
           "period": "February 2026",
           "event_title": "What price will Ethereum hit in February?",
           "event_slug": "what-price-will-ethereum-hit-in-february-2026",
@@ -606,22 +606,22 @@
             },
             {
               "price": 2200.0,
-              "probability": 1.1,
+              "probability": 0.8,
               "type": "up"
             },
             {
               "price": 2300.0,
-              "probability": 0.4,
+              "probability": 0.2,
               "type": "up"
             },
             {
               "price": 2400.0,
-              "probability": 0.4,
+              "probability": 0.1,
               "type": "up"
             },
             {
               "price": 2500.0,
-              "probability": 0.1,
+              "probability": 0.2,
               "type": "up"
             },
             {
@@ -633,32 +633,32 @@
           "downside": [
             {
               "price": 1200.0,
-              "probability": 0.2,
+              "probability": 1.5,
               "type": "down"
             },
             {
               "price": 1300.0,
-              "probability": 1.1,
+              "probability": 0.8,
               "type": "down"
             },
             {
               "price": 1400.0,
-              "probability": 0.7,
+              "probability": 1.8,
               "type": "down"
             },
             {
               "price": 1500.0,
-              "probability": 3.2,
+              "probability": 2.6,
               "type": "down"
             },
             {
               "price": 1600.0,
-              "probability": 4.2,
+              "probability": 3.7,
               "type": "down"
             },
             {
               "price": 1700.0,
-              "probability": 17.3,
+              "probability": 13.1,
               "type": "down"
             },
             {
@@ -667,8 +667,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 2102.0,
-          "expected_low": 1779.0,
+          "expected_high": 2104.0,
+          "expected_low": 1786.0,
           "period": "Ethereum February 23-March 1?",
           "event_title": "What price will Ethereum hit February 23-March 1?",
           "event_slug": "what-price-will-ethereum-hit-february-23-march-1",
@@ -679,7 +679,7 @@
     "sol": {
       "name": "Solana",
       "symbol": "SOL",
-      "current_price": 78.33,
+      "current_price": 78.82,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -690,17 +690,17 @@
             },
             {
               "price": 160.0,
-              "probability": 26.5,
+              "probability": 26.0,
               "type": "up"
             },
             {
               "price": 180.0,
-              "probability": 23.5,
+              "probability": 22.5,
               "type": "up"
             },
             {
               "price": 200.0,
-              "probability": 16.5,
+              "probability": 23.5,
               "type": "up"
             },
             {
@@ -715,7 +715,7 @@
             },
             {
               "price": 260.0,
-              "probability": 11.5,
+              "probability": 12.0,
               "type": "up"
             },
             {
@@ -757,7 +757,7 @@
             },
             {
               "price": 60.0,
-              "probability": 79.5,
+              "probability": 80.0,
               "type": "down"
             },
             {
@@ -776,8 +776,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 188.0,
-          "expected_low": 51.0,
+          "expected_high": 191.0,
+          "expected_low": 50.0,
           "period": "2026",
           "event_title": "What price will Solana hit in 2026?",
           "event_slug": "what-price-will-solana-hit-before-2027",
@@ -844,7 +844,7 @@
             },
             {
               "price": 40.0,
-              "probability": 0.2,
+              "probability": 0.1,
               "type": "down"
             },
             {
@@ -854,7 +854,7 @@
             },
             {
               "price": 60.0,
-              "probability": 0.8,
+              "probability": 0.6,
               "type": "down"
             },
             {
@@ -883,7 +883,7 @@
               "type": "down"
             }
           ],
-          "expected_high": 78.0,
+          "expected_high": 79.0,
           "expected_low": 70.0,
           "period": "February 2026",
           "event_title": "What price will Solana hit in February?",
@@ -899,12 +899,12 @@
             },
             {
               "price": 100.0,
-              "probability": 2.1,
+              "probability": 0.7,
               "type": "up"
             },
             {
               "price": 110.0,
-              "probability": 0.2,
+              "probability": 0.1,
               "type": "up"
             },
             {
@@ -946,27 +946,27 @@
             },
             {
               "price": 40.0,
-              "probability": 0.4,
+              "probability": 2.9,
               "type": "down"
             },
             {
               "price": 50.0,
-              "probability": 0.8,
+              "probability": 2.4,
               "type": "down"
             },
             {
               "price": 60.0,
-              "probability": 3.5,
+              "probability": 1.7,
               "type": "down"
             },
             {
               "price": 70.0,
-              "probability": 14.8,
+              "probability": 11.8,
               "type": "down"
             }
           ],
           "expected_high": 90.0,
-          "expected_low": 77.0,
+          "expected_low": 78.0,
           "period": "Solana February 23-March 1?",
           "event_title": "What price will Solana hit February 23-March 1?",
           "event_slug": "what-price-will-solana-hit-february-23-march-1",
@@ -975,5 +975,5 @@
       }
     }
   },
-  "last_updated": "2026-02-28T08:33:46.733704Z"
+  "last_updated": "2026-02-28T12:52:33.963308Z"
 }
