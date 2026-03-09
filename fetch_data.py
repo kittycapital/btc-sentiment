@@ -83,59 +83,21 @@ def get_monthly_slug(asset_key):
     return f"what-price-will-{name}-hit-in-{month_name}-{year}"
 
 
-def get_weekly_slug(asset_key):
+def get_daily_slug(asset_key):
     """
-    Build weekly slug from current date.
-    Polymarket weekly events run Monday-Sunday (7-day windows).
-    Slug format: what-price-will-{name}-hit-{month}-{start_day}-{end_day}
-    Cross-month weeks use abbreviated end day.
-    
-    Strategy: Try multiple slug patterns since exact date ranges vary.
+    Build daily slug for new Polymarket format.
+    Pattern: "bitcoin-above-on-march-9" for upside
+    Pattern: "bitcoin-price-on-march-9" for downside/range
     """
     name = ASSETS[asset_key]['slug_name']
     now = datetime.utcnow()
+    month_name = now.strftime('%B').lower()
+    day = now.day
     
-    # Generate candidate slugs for the current week
-    # Find the Monday of this week
-    monday = now - timedelta(days=now.weekday())
-    sunday = monday + timedelta(days=6)
-    
-    candidates = []
-    
-    # Primary: Monday-Sunday of current week
-    candidates.append(build_weekly_slug_str(name, monday, sunday))
-    
-    # Also try with the actual Polymarket pattern (sometimes offset by a day)
-    # Try Sunday-Saturday pattern too
-    sat = monday + timedelta(days=5)
-    candidates.append(build_weekly_slug_str(name, monday, sat))
-    
-    # Try Monday+1 to Sunday+1
-    candidates.append(build_weekly_slug_str(name, monday - timedelta(days=1), sunday - timedelta(days=1)))
-    candidates.append(build_weekly_slug_str(name, monday + timedelta(days=1), sunday + timedelta(days=1)))
-    
-    # Remove duplicates while preserving order
-    seen = set()
-    unique = []
-    for c in candidates:
-        if c not in seen:
-            seen.add(c)
-            unique.append(c)
-    
-    return unique
-
-
-def build_weekly_slug_str(name, start, end):
-    """Build a single weekly slug string from start/end dates"""
-    start_month = start.strftime('%B').lower()
-    end_month = end.strftime('%B').lower()
-    
-    if start.month == end.month:
-        # Same month: february-2-8
-        return f"what-price-will-{name}-hit-{start_month}-{start.day}-{end.day}"
-    else:
-        # Cross-month: february-23-march-1
-        return f"what-price-will-{name}-hit-{start_month}-{start.day}-{end_month}-{end.day}"
+    return {
+        'above': f"{name}-above-on-{month_name}-{day}",
+        'price': f"{name}-price-on-{month_name}-{day}",
+    }
 
 
 # ─── Polymarket API ───────────────────────────────────────────────────
@@ -242,37 +204,20 @@ def find_event_by_search(asset_key, timeframe):
                         matched = event
                         print(f"   ✅ Monthly match: {event.get('title')}")
 
-        elif timeframe == 'weekly':
+        elif timeframe == 'daily':
             month_name = now.strftime('%B').lower()
-            monday = now - timedelta(days=now.weekday())
-            sunday = monday + timedelta(days=6)
+            day = now.day
             
-            # Pattern 1: "What price will Bitcoin hit March 9-15?"
-            for day in range(monday.day, sunday.day + 1):
-                if f"{month_name} {monday.day}-{sunday.day}" in title:
+            # Match "Bitcoin above ___ on March 9?" or "Bitcoin price on March 9?"
+            if ('above' in title or 'price' in title) and f"{month_name} {day}" in title:
+                # Prefer "above" events for upside data
+                if 'above' in title:
                     if matched is None:
                         matched = event
-                        print(f"   ✅ Weekly match (range): {event.get('title')}")
-                    break
-                if f"{month_name}-{monday.day}-{sunday.day}" in title:
-                    if matched is None:
-                        matched = event
-                        print(f"   ✅ Weekly match (range): {event.get('title')}")
-                    break
-            
-            # Pattern 2: Check endDate falls within this week
-            if matched is None:
-                end_date_str = event.get('endDate', '')
-                if end_date_str:
-                    try:
-                        end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00')).replace(tzinfo=None)
-                        if monday <= end_date <= sunday + timedelta(days=2):
-                            # Prefer "what price will X hit" over "above" for weekly
-                            if 'hit' in title or 'price' in title:
-                                matched = event
-                                print(f"   ✅ Weekly match (date): {event.get('title')}")
-                    except Exception:
-                        pass
+                        print(f"   ✅ Daily match (above): {event.get('title')}")
+                elif matched is None:
+                    matched = event
+                    print(f"   ✅ Daily match (price): {event.get('title')}")
 
     if not matched:
         print(f"   ❌ No {timeframe} event matched from {len(events)} results")
@@ -285,13 +230,19 @@ def find_event_by_search(asset_key, timeframe):
 def parse_markets(event, asset_key):
     """
     Parse upside and downside markets from a Polymarket event.
-    Works generically across all assets and timeframes.
+    Works with both formats:
+    - Old: "What price will Bitcoin hit?" with reach/dip indicators
+    - New: "Bitcoin above ___?" where each market is a price level
     """
     if not event:
         return [], []
     
     upside = []
     downside = []
+    
+    title = (event.get('title') or '').lower()
+    is_above_event = 'above' in title
+    is_price_on_event = 'price on' in title or 'price' in title and 'above' not in title
     
     for market in event.get('markets', []):
         try:
@@ -308,30 +259,36 @@ def parse_markets(event, asset_key):
             if price is None:
                 continue
             
-            # Determine direction
-            q_lower = question.lower()
-            is_upside = any(indicator in q_lower for indicator in ['reach', '↑', 'hit'])
-            is_downside = any(indicator in q_lower for indicator in ['dip', 'drop', 'fall', '↓'])
-            
-            # If neither indicator found, try to infer from context
-            if not is_upside and not is_downside:
-                # Check if it contains "reach" or "dip" in the broader question
-                full_q = market.get('question', '').lower()
-                is_upside = 'reach' in full_q
-                is_downside = 'dip' in full_q or 'drop' in full_q
-            
-            if is_upside:
+            if is_above_event:
+                # "Bitcoin above ___" events → all markets are upside
                 upside.append({
                     'price': price,
                     'probability': round(probability, 1),
                     'type': 'up'
                 })
-            elif is_downside:
-                downside.append({
-                    'price': price,
-                    'probability': round(probability, 1),
-                    'type': 'down'
-                })
+            else:
+                # Original format with reach/dip indicators
+                q_lower = question.lower()
+                is_upside = any(indicator in q_lower for indicator in ['reach', '↑', 'hit'])
+                is_downside = any(indicator in q_lower for indicator in ['dip', 'drop', 'fall', '↓'])
+                
+                if not is_upside and not is_downside:
+                    full_q = market.get('question', '').lower()
+                    is_upside = 'reach' in full_q
+                    is_downside = 'dip' in full_q or 'drop' in full_q
+                
+                if is_upside:
+                    upside.append({
+                        'price': price,
+                        'probability': round(probability, 1),
+                        'type': 'up'
+                    })
+                elif is_downside:
+                    downside.append({
+                        'price': price,
+                        'probability': round(probability, 1),
+                        'type': 'down'
+                    })
                 
         except Exception as e:
             continue
@@ -468,8 +425,9 @@ def fetch_timeframe(asset_key, timeframe):
             slugs = [get_yearly_slug(asset_key)]
         elif timeframe == 'monthly':
             slugs = [get_monthly_slug(asset_key)]
-        elif timeframe == 'weekly':
-            slugs = get_weekly_slug(asset_key)
+        elif timeframe == 'daily':
+            daily_slugs = get_daily_slug(asset_key)
+            slugs = [daily_slugs['above'], daily_slugs['price']]
         else:
             slugs = []
         
@@ -494,10 +452,8 @@ def fetch_timeframe(asset_key, timeframe):
         period = str(now.year)
     elif timeframe == 'monthly':
         period = now.strftime('%B %Y')
-    elif timeframe == 'weekly':
-        period = event.get('title', '').replace('What price will ', '').replace(' hit ', ' ').strip()
-        if not period:
-            period = 'This Week'
+    elif timeframe == 'daily':
+        period = now.strftime('%B %d, %Y')
     
     return {
         'upside': upside,
@@ -538,7 +494,7 @@ def main():
             'timeframes': {}
         }
         
-        for timeframe in ['yearly', 'monthly', 'weekly']:
+        for timeframe in ['yearly', 'monthly', 'daily']:
             print(f"\n⏱️  {timeframe.upper()}:")
             tf_data = fetch_timeframe(asset_key, timeframe)
             
