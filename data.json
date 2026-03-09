@@ -3,7 +3,7 @@
     "btc": {
       "name": "Bitcoin",
       "symbol": "BTC",
-      "current_price": 67611,
+      "current_price": 67619,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -283,7 +283,7 @@
             }
           ],
           "expected_high": 73795.0,
-          "expected_low": 61542.0,
+          "expected_low": 61544.0,
           "period": "March 2026",
           "event_title": "What price will Bitcoin hit in March?",
           "event_slug": "what-price-will-bitcoin-hit-in-march-2026",
@@ -295,7 +295,7 @@
     "eth": {
       "name": "Ethereum",
       "symbol": "ETH",
-      "current_price": 1990.26,
+      "current_price": 1990.14,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -507,7 +507,7 @@
     "sol": {
       "name": "Solana",
       "symbol": "SOL",
-      "current_price": 83.46,
+      "current_price": 83.59,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -707,5 +707,5 @@
       }
     }
   },
-  "last_updated": "2026-03-09T11:43:03.453634Z"
+  "last_updated": "2026-03-09T11:44:29.153937Z"
 }
