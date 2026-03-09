@@ -180,18 +180,29 @@ def find_event_by_search(asset_key, timeframe):
     name = asset['slug_name']  # bitcoin, ethereum, solana
     now = datetime.utcnow()
 
-    # Step 1: Search with broad keyword
-    search_term = f"{name} price"
-    print(f"   🔍 Searching: '{search_term}'")
-    events = search_events(search_term)
-
-    if not events:
-        # Try alternative search terms
-        for alt in [asset['name'], asset['symbol']]:
-            print(f"   🔍 Retry: '{alt} price'")
-            events = search_events(f"{alt} price")
-            if events:
-                break
+    # Step 1: Search with multiple keyword variations
+    now_month = now.strftime('%B').lower()
+    search_terms = [
+        f"what price will {name} hit",
+        f"{name} price",
+        f"{name} above",
+        f"{asset['name']} price",
+        f"{asset['name']} hit",
+    ]
+    
+    events = []
+    for search_term in search_terms:
+        print(f"   🔍 Searching: '{search_term}'")
+        results = search_events(search_term)
+        if results:
+            # Merge results, avoiding duplicates by slug
+            seen_slugs = {e.get('slug') for e in events}
+            for r in results:
+                if r.get('slug') not in seen_slugs:
+                    events.append(r)
+                    seen_slugs.add(r.get('slug'))
+        if len(events) >= 30:
+            break
 
     if not events:
         print(f"   ❌ No events found for {name}")
@@ -210,7 +221,7 @@ def find_event_by_search(asset_key, timeframe):
             continue
 
         # Must be about price prediction
-        if not any(kw in title for kw in ['price', 'hit', 'reach', 'dip', 'drop']):
+        if not any(kw in title for kw in ['price', 'hit', 'reach', 'dip', 'drop', 'above', 'below']):
             continue
 
         if timeframe == 'yearly':
@@ -222,40 +233,46 @@ def find_event_by_search(asset_key, timeframe):
                         print(f"   ✅ Yearly match: {event.get('title')}")
 
         elif timeframe == 'monthly':
-            # Look for current month name
+            # Look for current month name + "hit" (not daily "above" events)
             month_name = now.strftime('%B').lower()
-            year_str = str(now.year)
-            if month_name in title and year_str in title:
-                if matched is None:
-                    matched = event
-                    print(f"   ✅ Monthly match: {event.get('title')}")
+            if month_name in title and ('hit' in title or 'price' in title):
+                # Exclude events with specific dates (those are daily/weekly)
+                if not any(f"{month_name} {d}" in title for d in range(1, 32)):
+                    if matched is None:
+                        matched = event
+                        print(f"   ✅ Monthly match: {event.get('title')}")
 
         elif timeframe == 'weekly':
-            # Look for weekly events — check if event end date falls within this week
-            end_date_str = event.get('endDate', '')
-            if end_date_str:
-                try:
-                    # Parse end date (ISO format)
-                    end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00')).replace(tzinfo=None)
-                    monday = now - timedelta(days=now.weekday())
-                    sunday = monday + timedelta(days=6)
-                    # Event ends within this week or next 2 days
-                    if monday <= end_date <= sunday + timedelta(days=2):
-                        if matched is None:
-                            matched = event
-                            print(f"   ✅ Weekly match: {event.get('title')}")
-                except Exception:
-                    pass
-
-            # Also try matching day numbers in title
+            month_name = now.strftime('%B').lower()
+            monday = now - timedelta(days=now.weekday())
+            sunday = monday + timedelta(days=6)
+            
+            # Pattern 1: "What price will Bitcoin hit March 9-15?"
+            for day in range(monday.day, sunday.day + 1):
+                if f"{month_name} {monday.day}-{sunday.day}" in title:
+                    if matched is None:
+                        matched = event
+                        print(f"   ✅ Weekly match (range): {event.get('title')}")
+                    break
+                if f"{month_name}-{monday.day}-{sunday.day}" in title:
+                    if matched is None:
+                        matched = event
+                        print(f"   ✅ Weekly match (range): {event.get('title')}")
+                    break
+            
+            # Pattern 2: Check endDate falls within this week
             if matched is None:
-                monday = now - timedelta(days=now.weekday())
-                sunday = monday + timedelta(days=6)
-                month_name = now.strftime('%B').lower()
-                # Check if title contains date range like "march 3-9"
-                if month_name in title and any(str(d) in title for d in range(monday.day, sunday.day + 1)):
-                    matched = event
-                    print(f"   ✅ Weekly match (date): {event.get('title')}")
+                end_date_str = event.get('endDate', '')
+                if end_date_str:
+                    try:
+                        end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00')).replace(tzinfo=None)
+                        if monday <= end_date <= sunday + timedelta(days=2):
+                            # Prefer "what price will X hit" over "above" for weekly
+                            if 'hit' in title or 'price' in title:
+                                matched = event
+                                print(f"   ✅ Weekly match (date): {event.get('title')}")
+                    except Exception:
+                        pass
 
     if not matched:
         print(f"   ❌ No {timeframe} event matched from {len(events)} results")
