@@ -154,6 +154,117 @@ def fetch_event(slug):
         return None
 
 
+def search_events(keyword, limit=20):
+    """Search Polymarket events by keyword"""
+    try:
+        params = {
+            'title': keyword,
+            'closed': 'false',
+            'limit': limit,
+        }
+        response = requests.get(POLYMARKET_API, params=params, timeout=15)
+        response.raise_for_status()
+        events = response.json()
+        return events if events else []
+    except Exception as e:
+        print(f"   ⚠️ Search error for '{keyword}': {e}")
+        return []
+
+
+def find_event_by_search(asset_key, timeframe):
+    """
+    Find the right Polymarket event using keyword search + filtering.
+    More robust than slug matching — survives slug format changes.
+    """
+    asset = ASSETS[asset_key]
+    name = asset['slug_name']  # bitcoin, ethereum, solana
+    now = datetime.utcnow()
+
+    # Step 1: Search with broad keyword
+    search_term = f"{name} price"
+    print(f"   🔍 Searching: '{search_term}'")
+    events = search_events(search_term)
+
+    if not events:
+        # Try alternative search terms
+        for alt in [asset['name'], asset['symbol']]:
+            print(f"   🔍 Retry: '{alt} price'")
+            events = search_events(f"{alt} price")
+            if events:
+                break
+
+    if not events:
+        print(f"   ❌ No events found for {name}")
+        return None
+
+    # Step 2: Filter by timeframe
+    matched = None
+    title_lower_list = []
+
+    for event in events:
+        title = (event.get('title') or '').lower()
+        title_lower_list.append(title)
+
+        # Must contain the asset name
+        if name not in title and asset['symbol'].lower() not in title:
+            continue
+
+        # Must be about price prediction
+        if not any(kw in title for kw in ['price', 'hit', 'reach', 'dip', 'drop']):
+            continue
+
+        if timeframe == 'yearly':
+            # Look for year-based events (2026, 2027, etc.)
+            if any(f"{y}" in title for y in [now.year, now.year + 1]):
+                if 'before' in title or 'by' in title or 'end of' in title or str(now.year + 1) in title:
+                    if matched is None:
+                        matched = event
+                        print(f"   ✅ Yearly match: {event.get('title')}")
+
+        elif timeframe == 'monthly':
+            # Look for current month name
+            month_name = now.strftime('%B').lower()
+            year_str = str(now.year)
+            if month_name in title and year_str in title:
+                if matched is None:
+                    matched = event
+                    print(f"   ✅ Monthly match: {event.get('title')}")
+
+        elif timeframe == 'weekly':
+            # Look for weekly events — check if event end date falls within this week
+            end_date_str = event.get('endDate', '')
+            if end_date_str:
+                try:
+                    # Parse end date (ISO format)
+                    end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00')).replace(tzinfo=None)
+                    monday = now - timedelta(days=now.weekday())
+                    sunday = monday + timedelta(days=6)
+                    # Event ends within this week or next 2 days
+                    if monday <= end_date <= sunday + timedelta(days=2):
+                        if matched is None:
+                            matched = event
+                            print(f"   ✅ Weekly match: {event.get('title')}")
+                except Exception:
+                    pass
+
+            # Also try matching day numbers in title
+            if matched is None:
+                monday = now - timedelta(days=now.weekday())
+                sunday = monday + timedelta(days=6)
+                month_name = now.strftime('%B').lower()
+                # Check if title contains date range like "march 3-9"
+                if month_name in title and any(str(d) in title for d in range(monday.day, sunday.day + 1)):
+                    matched = event
+                    print(f"   ✅ Weekly match (date): {event.get('title')}")
+
+    if not matched:
+        print(f"   ❌ No {timeframe} event matched from {len(events)} results")
+        if title_lower_list:
+            print(f"   📋 Available: {title_lower_list[:5]}")
+
+    return matched
+
+
 def parse_markets(event, asset_key):
     """
     Parse upside and downside markets from a Polymarket event.
@@ -330,32 +441,32 @@ def fetch_timeframe(asset_key, timeframe):
     """Fetch data for a specific asset + timeframe combination"""
     asset = ASSETS[asset_key]
     
-    if timeframe == 'yearly':
-        slug = get_yearly_slug(asset_key)
-        slugs = [slug]
-    elif timeframe == 'monthly':
-        slug = get_monthly_slug(asset_key)
-        slugs = [slug]
-    elif timeframe == 'weekly':
-        slugs = get_weekly_slug(asset_key)
-    else:
-        return None
+    # Primary: keyword search (robust)
+    event = find_event_by_search(asset_key, timeframe)
     
-    # Try each slug candidate
-    event = None
-    used_slug = None
-    for slug in slugs:
-        print(f"   Trying: {slug}")
-        event = fetch_event(slug)
-        if event:
-            used_slug = slug
-            break
+    # Fallback: try slug-based approach
+    if not event:
+        print(f"   🔄 Falling back to slug-based search...")
+        if timeframe == 'yearly':
+            slugs = [get_yearly_slug(asset_key)]
+        elif timeframe == 'monthly':
+            slugs = [get_monthly_slug(asset_key)]
+        elif timeframe == 'weekly':
+            slugs = get_weekly_slug(asset_key)
+        else:
+            slugs = []
+        
+        for slug in slugs:
+            print(f"   Trying slug: {slug}")
+            event = fetch_event(slug)
+            if event:
+                break
     
     if not event:
         print(f"   ❌ No event found for {asset_key}/{timeframe}")
         return None
     
-    print(f"   ✅ Found: {event.get('title', 'Unknown')} (slug: {used_slug})")
+    print(f"   ✅ Using: {event.get('title', 'Unknown')}")
     
     upside, downside = parse_markets(event, asset_key)
     print(f"   📊 Upside: {len(upside)} targets, Downside: {len(downside)} targets")
@@ -363,21 +474,20 @@ def fetch_timeframe(asset_key, timeframe):
     # Get period label
     now = datetime.utcnow()
     if timeframe == 'yearly':
-        period = "2026"
+        period = str(now.year)
     elif timeframe == 'monthly':
         period = now.strftime('%B %Y')
     elif timeframe == 'weekly':
-        # Extract from event title or slug
         period = event.get('title', '').replace('What price will ', '').replace(' hit ', ' ').strip()
         if not period:
-            period = used_slug.split('hit-')[-1] if used_slug else 'This Week'
+            period = 'This Week'
     
     return {
         'upside': upside,
         'downside': downside,
         'period': period,
         'event_title': event.get('title'),
-        'event_slug': used_slug,
+        'event_slug': event.get('slug'),
         'end_date': event.get('endDate')
     }
 
