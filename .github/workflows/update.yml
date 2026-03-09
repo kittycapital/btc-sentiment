@@ -2,7 +2,7 @@ name: Update Crypto Prediction Data
 
 on:
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: '0 0 * * *'  # Every day at 00:00 UTC (KST 09:00)
   workflow_dispatch:
 
 permissions:
