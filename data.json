@@ -3,7 +3,7 @@
     "btc": {
       "name": "Bitcoin",
       "symbol": "BTC",
-      "current_price": 83135,
+      "current_price": 83253,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -39,12 +39,12 @@
             },
             {
               "price": 95000.0,
-              "probability": 48.5,
+              "probability": 49.5,
               "type": "up"
             },
             {
               "price": 100000.0,
-              "probability": 34.5,
+              "probability": 34.0,
               "type": "up"
             },
             {
@@ -59,22 +59,22 @@
             },
             {
               "price": 130000.0,
-              "probability": 6.0,
+              "probability": 5.7,
               "type": "up"
             },
             {
               "price": 140000.0,
-              "probability": 4.4,
+              "probability": 4.5,
               "type": "up"
             },
             {
               "price": 150000.0,
-              "probability": 3.5,
+              "probability": 3.4,
               "type": "up"
             },
             {
               "price": 160000.0,
-              "probability": 3.8,
+              "probability": 3.1,
               "type": "up"
             },
             {
@@ -84,17 +84,17 @@
             },
             {
               "price": 180000.0,
-              "probability": 1.1,
+              "probability": 1.5,
               "type": "up"
             },
             {
               "price": 190000.0,
-              "probability": 0.9,
+              "probability": 1.1,
               "type": "up"
             },
             {
               "price": 200000.0,
-              "probability": 1.3,
+              "probability": 1.2,
               "type": "up"
             },
             {
@@ -109,29 +109,29 @@
             },
             {
               "price": 1000000.0,
-              "probability": 0.3,
+              "probability": 0.2,
               "type": "up"
             }
           ],
           "downside": [
             {
               "price": 10000.0,
-              "probability": 0.5,
+              "probability": 0.4,
               "type": "down"
             },
             {
               "price": 15000.0,
-              "probability": 0.9,
+              "probability": 0.4,
               "type": "down"
             },
             {
               "price": 20000.0,
-              "probability": 1.6,
+              "probability": 1.5,
               "type": "down"
             },
             {
               "price": 25000.0,
-              "probability": 1.4,
+              "probability": 1.2,
               "type": "down"
             },
             {
@@ -141,22 +141,22 @@
             },
             {
               "price": 35000.0,
-              "probability": 2.6,
+              "probability": 2.5,
               "type": "down"
             },
             {
               "price": 40000.0,
-              "probability": 3.9,
+              "probability": 3.7,
               "type": "down"
             },
             {
               "price": 45000.0,
-              "probability": 4.5,
+              "probability": 4.7,
               "type": "down"
             },
             {
               "price": 50000.0,
-              "probability": 7.5,
+              "probability": 7.0,
               "type": "down"
             },
             {
@@ -190,8 +190,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 103220.0,
-          "expected_low": 108180.0,
+          "expected_high": 101675.0,
+          "expected_low": 108280.0,
           "period": "2026",
           "event_title": "What price will Bitcoin hit in 2026?",
           "event_slug": "what-price-will-bitcoin-hit-before-2027",
@@ -221,27 +221,27 @@
             },
             {
               "price": 87500.0,
-              "probability": 4.5,
+              "probability": 2.8,
               "type": "up"
             },
             {
               "price": 90000.0,
-              "probability": 1.1,
+              "probability": 0.8,
               "type": "up"
             },
             {
               "price": 92500.0,
-              "probability": 0.9,
+              "probability": 0.5,
               "type": "up"
             },
             {
               "price": 95000.0,
-              "probability": 0.4,
+              "probability": 0.1,
               "type": "up"
             },
             {
               "price": 97500.0,
-              "probability": 0.2,
+              "probability": 0.1,
               "type": "up"
             },
             {
@@ -283,12 +283,12 @@
             },
             {
               "price": 70000.0,
-              "probability": 0.4,
+              "probability": 0.2,
               "type": "down"
             },
             {
               "price": 72500.0,
-              "probability": 0.4,
+              "probability": 0.2,
               "type": "down"
             },
             {
@@ -308,7 +308,7 @@
             },
             {
               "price": 82500.0,
-              "probability": 72.5,
+              "probability": 57.5,
               "type": "down"
             },
             {
@@ -317,8 +317,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 85180.0,
-          "expected_low": 98340.0,
+          "expected_high": 85110.0,
+          "expected_low": 111100.0,
           "period": "September 2026",
           "event_title": "What price will Bitcoin hit in September?",
           "event_slug": "what-price-will-bitcoin-hit-in-september-2026",
@@ -385,17 +385,17 @@
           "downside": [],
           "expected_high": 112000.0,
           "expected_low": null,
-          "period": "September 29, 2026",
-          "event_title": "Bitcoin above ___ on September 29?",
-          "event_slug": "bitcoin-above-on-september-29",
-          "end_date": "2025-09-29T16:00:00Z"
+          "period": "September 30, 2026",
+          "event_title": "Bitcoin above ___ on September 30?",
+          "event_slug": "bitcoin-above-on-september-30",
+          "end_date": "2025-09-30T16:00:00Z"
         }
       }
     },
     "eth": {
       "name": "Ethereum",
       "symbol": "ETH",
-      "current_price": 2667.27,
+      "current_price": 2670.23,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -426,37 +426,37 @@
             },
             {
               "price": 3000.0,
-              "probability": 64.5,
+              "probability": 66.0,
               "type": "up"
             },
             {
               "price": 3500.0,
-              "probability": 34.5,
+              "probability": 35.5,
               "type": "up"
             },
             {
               "price": 4000.0,
-              "probability": 14.5,
+              "probability": 16.5,
               "type": "up"
             },
             {
               "price": 4500.0,
-              "probability": 8.5,
+              "probability": 7.5,
               "type": "up"
             },
             {
               "price": 5000.0,
-              "probability": 5.3,
+              "probability": 5.5,
               "type": "up"
             },
             {
               "price": 5500.0,
-              "probability": 4.3,
+              "probability": 3.8,
               "type": "up"
             },
             {
               "price": 6000.0,
-              "probability": 3.5,
+              "probability": 3.9,
               "type": "up"
             },
             {
@@ -471,7 +471,7 @@
             },
             {
               "price": 7500.0,
-              "probability": 1.4,
+              "probability": 1.5,
               "type": "up"
             },
             {
@@ -481,14 +481,14 @@
             },
             {
               "price": 10000.0,
-              "probability": 1.3,
+              "probability": 1.2,
               "type": "up"
             }
           ],
           "downside": [
             {
               "price": 500.0,
-              "probability": 1.6,
+              "probability": 1.5,
               "type": "down"
             },
             {
@@ -503,7 +503,7 @@
             },
             {
               "price": 800.0,
-              "probability": 2.8,
+              "probability": 2.9,
               "type": "down"
             },
             {
@@ -513,17 +513,17 @@
             },
             {
               "price": 1250.0,
-              "probability": 5.5,
+              "probability": 5.0,
               "type": "down"
             },
             {
               "price": 1500.0,
-              "probability": 6.9,
+              "probability": 6.7,
               "type": "down"
             },
             {
               "price": 1750.0,
-              "probability": 8.5,
+              "probability": 8.0,
               "type": "down"
             },
             {
@@ -542,8 +542,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 3340.0,
-          "expected_low": 3700.0,
+          "expected_high": 3351.0,
+          "expected_low": 3703.0,
           "period": "2026",
           "event_title": "What price will Ethereum hit in 2026?",
           "event_slug": "what-price-will-ethereum-hit-before-2027",
@@ -578,22 +578,22 @@
             },
             {
               "price": 2900.0,
-              "probability": 3.5,
+              "probability": 1.2,
               "type": "up"
             },
             {
               "price": 3000.0,
-              "probability": 1.5,
-              "type": "up"
-            },
-            {
-              "price": 3100.0,
               "probability": 0.8,
               "type": "up"
             },
             {
+              "price": 3100.0,
+              "probability": 0.4,
+              "type": "up"
+            },
+            {
               "price": 3200.0,
-              "probability": 0.7,
+              "probability": 0.1,
               "type": "up"
             },
             {
@@ -630,17 +630,17 @@
             },
             {
               "price": 1900.0,
-              "probability": 0.1,
-              "type": "down"
-            },
-            {
-              "price": 2000.0,
               "probability": 0.2,
               "type": "down"
             },
             {
+              "price": 2000.0,
+              "probability": 0.4,
+              "type": "down"
+            },
+            {
               "price": 2100.0,
-              "probability": 0.1,
+              "probability": 0.5,
               "type": "down"
             },
             {
@@ -650,7 +650,7 @@
             },
             {
               "price": 2300.0,
-              "probability": 0.6,
+              "probability": 0.5,
               "type": "down"
             },
             {
@@ -674,7 +674,7 @@
               "type": "down"
             }
           ],
-          "expected_high": 2807.0,
+          "expected_high": 2803.0,
           "expected_low": 2400.0,
           "period": "September 2026",
           "event_title": "What price will Ethereum hit in September?",
@@ -742,17 +742,17 @@
           "downside": [],
           "expected_high": 4100.0,
           "expected_low": null,
-          "period": "September 29, 2026",
-          "event_title": "Ethereum above ___ on September 29?",
-          "event_slug": "ethereum-above-on-september-29",
-          "end_date": "2025-09-29T16:00:00Z"
+          "period": "September 30, 2026",
+          "event_title": "Ethereum above ___ on September 30?",
+          "event_slug": "ethereum-above-on-september-30",
+          "end_date": "2025-09-30T16:00:00Z"
         }
       }
     },
     "sol": {
       "name": "Solana",
       "symbol": "SOL",
-      "current_price": 117.85,
+      "current_price": 119.32,
       "timeframes": {
         "yearly": {
           "upside": [
@@ -793,27 +793,27 @@
             },
             {
               "price": 180.0,
-              "probability": 17.0,
+              "probability": 18.4,
               "type": "up"
             },
             {
               "price": 200.0,
-              "probability": 11.5,
+              "probability": 11.0,
               "type": "up"
             },
             {
               "price": 220.0,
-              "probability": 9.8,
+              "probability": 8.0,
               "type": "up"
             },
             {
               "price": 240.0,
-              "probability": 5.5,
+              "probability": 5.8,
               "type": "up"
             },
             {
               "price": 260.0,
-              "probability": 4.2,
+              "probability": 4.3,
               "type": "up"
             },
             {
@@ -823,7 +823,7 @@
             },
             {
               "price": 300.0,
-              "probability": 3.0,
+              "probability": 2.6,
               "type": "up"
             },
             {
@@ -838,7 +838,7 @@
             },
             {
               "price": 600.0,
-              "probability": 0.6,
+              "probability": 0.4,
               "type": "up"
             }
           ],
@@ -855,7 +855,7 @@
             },
             {
               "price": 40.0,
-              "probability": 3.9,
+              "probability": 4.1,
               "type": "down"
             },
             {
@@ -865,12 +865,12 @@
             },
             {
               "price": 60.0,
-              "probability": 9.4,
+              "probability": 8.6,
               "type": "down"
             },
             {
               "price": 70.0,
-              "probability": 15.5,
+              "probability": 14.5,
               "type": "down"
             },
             {
@@ -880,7 +880,7 @@
             },
             {
               "price": 90.0,
-              "probability": 31.5,
+              "probability": 29.5,
               "type": "down"
             },
             {
@@ -894,8 +894,8 @@
               "type": "down"
             }
           ],
-          "expected_high": 160.0,
-          "expected_low": 145.0,
+          "expected_high": 159.0,
+          "expected_low": 147.0,
           "period": "2026",
           "event_title": "What price will Solana hit in 2026?",
           "event_slug": "what-price-will-solana-hit-before-2027",
@@ -920,12 +920,12 @@
             },
             {
               "price": 130.0,
-              "probability": 6.0,
+              "probability": 3.9,
               "type": "up"
             },
             {
               "price": 140.0,
-              "probability": 0.4,
+              "probability": 0.9,
               "type": "up"
             },
             {
@@ -935,7 +935,7 @@
             },
             {
               "price": 160.0,
-              "probability": 0.4,
+              "probability": 0.1,
               "type": "up"
             },
             {
@@ -945,7 +945,7 @@
             },
             {
               "price": 180.0,
-              "probability": 0.1,
+              "probability": 0.3,
               "type": "up"
             },
             {
@@ -1002,7 +1002,7 @@
             },
             {
               "price": 90.0,
-              "probability": 0.8,
+              "probability": 0.3,
               "type": "down"
             },
             {
@@ -1052,7 +1052,7 @@
             },
             {
               "price": 210.0,
-              "probability": 100.0,
+              "probability": 0.0,
               "type": "up"
             },
             {
@@ -1087,15 +1087,15 @@
             }
           ],
           "downside": [],
-          "expected_high": 210.0,
+          "expected_high": 200.0,
           "expected_low": null,
-          "period": "September 29, 2026",
-          "event_title": "Solana above ___ on September 29?",
-          "event_slug": "solana-above-on-september-29",
-          "end_date": "2025-09-29T16:00:00Z"
+          "period": "September 30, 2026",
+          "event_title": "Solana above ___ on September 30?",
+          "event_slug": "solana-above-on-september-30",
+          "end_date": "2025-09-30T16:00:00Z"
         }
       }
     }
   },
-  "last_updated": "2026-09-29T03:39:45.387717Z"
+  "last_updated": "2026-09-30T03:25:54.864020Z"
 }
